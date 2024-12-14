@@ -1,0 +1,18 @@
+[submodule "Unity/TargetOne/Assets/Libs/gamelib"]
+	path = Unity/TargetOne/Assets/Libs/gamelib
+	url = https://github.com/cholushkin/gamelib.git
+[submodule "Unity/TargetOne/Assets/Libs/TinyColor"]
+	path = Unity/TargetOne/Assets/Libs/TinyColor
+	url = https://github.com/cholushkin/TinyColor.git
+[submodule "Unity/TargetOne/Assets/Libs/TowerGenerator"]
+	path = Unity/TargetOne/Assets/Libs/TowerGenerator
+	url = https://github.com/cholushkin/towergenerator.git
+[submodule "Unity/TargetOne/Assets/Libs/uconsole"]
+	path = Unity/TargetOne/Assets/Libs/uconsole
+	url = https://github.com/cholushkin/uconsole.git
+[submodule "Unity/TargetOne/Assets/Libs/UMoonSharp"]
+	path = Unity/TargetOne/Assets/Libs/UMoonSharp
+	url = https://github.com/cholushkin/umoonsharp.git
+[submodule "Unity/TargetOne/Assets/Libs/VersionHistory"]
+	path = Unity/TargetOne/Assets/Libs/VersionHistory
+	url = https://github.com/cholushkin/VersionHistory.git

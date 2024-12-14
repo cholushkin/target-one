@@ -1,0 +1,1 @@
+add_submodule.py https://github.com/cholushkin/uconsole.git Unity/TargetOne/Assets/Libs/uconsole

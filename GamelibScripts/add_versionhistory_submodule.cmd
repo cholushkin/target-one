@@ -1,0 +1,1 @@
+python add_submodule.py https://github.com/cholushkin/VersionHistory.git Unity/TargetOne/Assets/Libs/VersionHistory

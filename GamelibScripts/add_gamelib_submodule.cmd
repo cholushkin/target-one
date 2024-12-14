@@ -1,0 +1,1 @@
+python add_submodule.py https://github.com/cholushkin/gamelib.git Unity/TargetOne/Assets/Libs/gamelib

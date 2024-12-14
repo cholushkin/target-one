@@ -1,0 +1,1 @@
+rem python remove_submodule.py Unity/TargetOne/Assets/Libs/gamelib
