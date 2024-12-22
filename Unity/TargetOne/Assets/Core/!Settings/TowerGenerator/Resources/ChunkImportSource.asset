@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: ChunkImportSource
   m_EditorClassIdentifier: 
   FbxInputPath:
-  - Assets\Core\Fbx
+  - Assets\Core\!Fbx\LevChunks
+  ChunkCooker: TileChunkCooker
   EnableMetaGeneration: 0
   GenerateVariant: 1
   IsPack: 0
   EnableImport: 1
   EnableCleanupFbxRoot: 0
-  AddColliders: 0
+  AddColliders: 1
   CastShadows: 1
   ApplyMaterials: 0
   CastleChunkMat: {fileID: 0}
