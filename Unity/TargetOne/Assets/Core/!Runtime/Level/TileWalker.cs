@@ -129,7 +129,7 @@ public class TileWalker : MonoBehaviour
                     _quiting = false;
                     SetCurrentTile(tile);
                     SetSubdestinationPointer(CurrentTile, tile.transform.position);
-                    Debug.Log($"next tile {tile.name}");
+                    //Debug.Log($"next tile {tile.name}");
                     return;
                     // float elevationDifference = Mathf.Abs(toTile.y);
                     // float angleDifference = Vector3.Angle(CurrentTile.Normal, tile.Normal);
