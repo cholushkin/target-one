@@ -29,17 +29,23 @@ public class TileWheelRotation : MonoBehaviour
     [Button]
     public void Rotate()
     {
+        if (!_lastFromTile)
+        {
+            LogChecker.PrintWarning(LogChecker.Level.Important, $"There is no registered Walker entered tile {name}");
+            return;
+        }
+
         var item = Rotations.FirstOrDefault(i => i.EnterTile == _lastFromTile);
         if (item == null)
         {
-            LogChecker.Print(LogChecker.Level.Important, $"can't find {_lastFromTile.name} in defined rotations");
+            LogChecker.PrintWarning(LogChecker.Level.Important, $"can't find {_lastFromTile.name} in defined rotations");
             return;
         }
 
         var finalTargetRotation = transform.localRotation * item.AddQuaternion;
         var speed = RotationSpeed * GameSession.Instance.GameSpeed;
         var distance = Quaternion.Angle(transform.localRotation, finalTargetRotation);
-        float duration = distance / RotationSpeed;
+        float duration = distance / speed;
 
         transform.DOLocalRotateQuaternion(finalTargetRotation, duration)
             .SetEase(Ease);
