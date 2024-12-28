@@ -1,12 +1,13 @@
-using UnityEngine;
-
-public class TriggerTileReachCenter : TriggerBase
+namespace Core
 {
-    public void HitTriggerReachCenter(TileWalker tileWalker)
+    public class TriggerTileReachCenter : TriggerBase
     {
-        if (WillHit())
+        public void HitTriggerReachCenter(TileWalker tileWalker)
         {
-            base.HitTrigger();
+            if (WillHit())
+            {
+                base.HitTrigger();
+            }
         }
     }
 }

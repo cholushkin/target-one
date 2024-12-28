@@ -1,10 +1,10 @@
 using System;
 using System.Linq;
+using Core;
 using DG.Tweening;
 using GameLib.Log;
 using NaughtyAttributes;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 public class TileWheelRotation : MonoBehaviour
 {
@@ -17,13 +17,13 @@ public class TileWheelRotation : MonoBehaviour
 
     public LogChecker LogChecker;
     public DirectionItem[] Rotations;
-    public float RotationSpeed;
     public Ease Ease;
     private Tile _lastFromTile;
 
 
     public void Reset()
     {
+        Ease = Ease.InOutQuart;
     }
 
     [Button]
@@ -43,9 +43,19 @@ public class TileWheelRotation : MonoBehaviour
         }
 
         var finalTargetRotation = transform.localRotation * item.AddQuaternion;
-        var speed = RotationSpeed * GameSession.Instance.GameSpeed;
-        var distance = Quaternion.Angle(transform.localRotation, finalTargetRotation);
-        float duration = distance / speed;
+        
+        // Get walker
+        var walker = GetComponentInChildren<TileWalker>();
+        if (!walker)
+        {
+            LogChecker.PrintWarning(LogChecker.Level.Important, $"can't find Walker. Tile: {name}");
+            return;
+        }
+
+        // Get walker duration to walk through the tile
+        var duration = walker.GetTimeLeftToQuitCurrentTile();
+        Debug.Log(duration);
+
 
         transform.DOLocalRotateQuaternion(finalTargetRotation, duration)
             .SetEase(Ease);

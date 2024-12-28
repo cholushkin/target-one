@@ -7,8 +7,6 @@ namespace Core
 {
     public class TriggerTileButton : TriggerBase
     {
-        public LogChecker LogChecker;
-
         [Tooltip("The transform of the button to animate.")]
         public Transform ButtonTransform;
 
@@ -27,10 +25,16 @@ namespace Core
         [Tooltip("Easing function for the release animation.")]
         public Ease UnpressEase;
 
+        [Tooltip("Percent of half tile size")]
+        [Range(0f,1f)]
+        public float ActiveRadius;
+
         public Vector3 LocalNormal => Vector3.forward; // Local Z axis
 
-        void Reset()
+        public override void Reset()
         {
+            base.Reset();
+            ActiveRadius = 0.9f;
             PressDepth = 0.2f;
             PressDuration = 0.2f;
             UnpressDuration = 0.4f;
@@ -43,6 +47,16 @@ namespace Core
         {
             if (WillHit())
             {
+                // Quit if not within Active radius 
+                {
+                    var distance = Vector3.Distance(tileWalker.transform.position, transform.position);
+                    if (distance / (Tile.TileSize * 0.5f) > ActiveRadius)
+                    {
+                        Debug.Log($"Out of button active radius!");
+                        return;
+                    }
+                }
+                
                 base.HitTrigger();
                 VisualHandler();
             }

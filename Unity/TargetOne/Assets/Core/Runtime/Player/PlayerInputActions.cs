@@ -17,6 +17,7 @@ public class PlayerInputActions : MonoBehaviour
     {
         if (interactAction.WasPressedThisFrame())
         {
+            Debug.Log("Input: Interact");
             PlayerController.DoInteraction();
         }
     }
