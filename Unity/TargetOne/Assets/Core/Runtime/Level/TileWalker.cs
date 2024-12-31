@@ -1,7 +1,5 @@
 using GameLib;
-using GameLib.Alg;
 using GameLib.Log;
-using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -14,14 +12,20 @@ namespace Core
         {
             Walking,
             Standing,
-            Terminating,
-            Dead
+            Falling
         }
 
-#region Inspector
+        public enum TileState
+        {
+            Entering, 
+            Quiting,
+            Falling
+        }
 
+        #region Inspector-----------------------------------------------------------------------------------------------
         public LogChecker LogChecker;
         public GameObject SubDestinationPointer;
+        public SmoothTileFollower SmoothTileFollower;
 
         [Tooltip("Movement speed (units per second).")]
         public float Speed = 2.0f;
@@ -34,17 +38,19 @@ namespace Core
 
         public Tile CurrentTile;
 
-#endregion
+        #endregion -----------------------------------------------------------------------------------------------------
 
         public float CurrentSpeed => Speed * GameSession.Instance.GameSpeed;
-
+        public bool StickToTile { get; set; }
+        public TileState CurrentTileState { get; set; }
 
         private Tile _targetTile;
 
         private State _currentState;
-        private bool _quiting;
+        
         private StateMachine<State> _stateMachine;
 
+        #region Unity callbacks ----------------------------------------------------------------------------------------
         public void Awake()
         {
             Init(CurrentTile);
@@ -79,8 +85,13 @@ namespace Core
             Gizmos.DrawLine(transform.position, transform.position + transform.right * 1.5f);
             Gizmos.DrawSphere(transform.position + transform.right * 1.5f, 0.1f);
 
-            // Draw the body as a solid sphere
-            Gizmos.color = _quiting ? Color.red : Color.green;
+            // Red color for falling state
+            Gizmos.color = Color.red;
+            if(CurrentTileState == TileState.Quiting)
+                Gizmos.color = Color.yellow;
+            else if(CurrentTileState == TileState.Entering)
+                Gizmos.color = Color.green;
+            
             Gizmos.DrawSphere(transform.position, 0.2f);
 
             // Draw SubDestinationPointer position as a wire sphere
@@ -90,25 +101,15 @@ namespace Core
                 Gizmos.DrawWireSphere(SubDestinationPointer.transform.position, 0.2f);
             }
         }
+        #endregion -----------------------------------------------------------------------------------------------------
 
-        private void Init(Tile startTile)
+        public void Init(Tile startTile)
         {
             Assert.IsNotNull(startTile);
             SetCurrentTile(startTile);
             transform.position = CurrentTile.gameObject.transform.position;
             transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
         }
-
-        private void SetCurrentTile(Tile tile)
-        {
-            CurrentTile = tile;
-            transform.rotation =
-                Quaternion.LookRotation(GetClosestTileDirection(CurrentTile, transform.forward), CurrentTile.Up);
-            transform.SetParent(tile.transform);
-        }
-
-
-
 
         #region State machine
         // ( OnEnter, OnUpdate, OnExit )
@@ -123,45 +124,98 @@ namespace Core
             StartQuitingTile();
         }
 
-
-
         private void OnUpdateWalking()
         {
             // Calculate the direction to the destination
-            Vector3 direction = (SubDestinationPointer.transform.position - transform.position).normalized;
+            Vector3 direction = (SubDestinationPointer.transform.localPosition - transform.localPosition).normalized;
 
             // Calculate the distance to move this frame
             float distanceToMove = CurrentSpeed * Time.deltaTime;
 
             // Calculate the remaining distance to the destination
-            float remainingDistance = Vector3.Distance(transform.position, SubDestinationPointer.transform.position);
+            float remainingDistance = Vector3.Distance(transform.localPosition, SubDestinationPointer.transform.localPosition);
 
             // Check if moving would overshoot the destination
             if (distanceToMove >= remainingDistance)
             {
-                if (_quiting)
+                // --- On reach tile edge
+                if (CurrentTileState == TileState.Quiting)
                 {
-                    // On reach tile edge
+                    
+                    if(StickToTile)
+                        Debug.LogWarning($"still rotating, left time: {GetTimeLeftToQuitCurrentTile()}");
                     var tileChanged = StartMoveToNextTile();
                     // if(!tileChanged)
                     //     Debug.Log("waking up state");
                     
                 }
-                else
+                // --- On reach center
+                else if (CurrentTileState == TileState.Entering)
                 {
-                    // On reach center
+                    
                     CurrentTile.GetComponent<TriggerTileReachCenter>()?.HitTriggerReachCenter(this);
                     StartQuitingTile();
+
+                    // Set smooth look direction target
+                    if(SmoothTileFollower && !StickToTile)
+                    {
+                        var nextTile = GetNextTile();
+                        if (nextTile)
+                        {
+                            // Minimum duration to reach next tile center from current tile center (in fact it could be greater but for ERP purposes it's OK)
+                            var minDuration = Tile.TileSize / CurrentSpeed;
+                            var nextTileCharMovementDirection = GetClosestTileDirection(nextTile, transform.forward);
+                            SmoothTileFollower.transform.rotation = Quaternion.LookRotation(GetClosestTileDirection(CurrentTile,transform.forward), CurrentTile.Up);
+                            SmoothTileFollower.SetErpTarget(Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up), minDuration);
+                        }
+                        else
+                        {
+                            SmoothTileFollower.transform.rotation = Quaternion.LookRotation(GetClosestTileDirection(CurrentTile,transform.forward), CurrentTile.Up);
+                            SmoothTileFollower.SetErpTarget(Quaternion.LookRotation(transform.forward, CurrentTile.Up), Tile.TileSize * 0.5f / CurrentSpeed);
+                        }
+                        
+                    }
                 }
             }
 
             // Move towards the destination
-            transform.position += direction * distanceToMove;
+            transform.localPosition += direction * distanceToMove;
+        }
+        #endregion
+
+        // public void SetErpForRotation(float duration)
+        // {
+        //     OnSetErpTarget(Quaternion.LookRotation(transform.forward, CurrentTile.Up), Tile.TileSize * 0.5f / CurrentSpeed);
+        // }
+        
+        private void SetCurrentTile(Tile tile)
+        {
+            CurrentTile = tile;
+            ChangeDirection(Quaternion.LookRotation(GetClosestTileDirection(CurrentTile, transform.forward), CurrentTile.Up));
+            transform.SetParent(tile.transform);
+            // if(SmoothTileFollower)
+            //     SmoothTileFollower.transform.SetParent(tile.transform);
         }
 
+        
+        // Note: works only when SubDestinationPointer is set on the exit of the tile
+        private Tile GetNextTile()
+        {
+            var sphereHits = Physics.OverlapSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2);
+            
+            // if (LogChecker.Gizmos)
+            //      GameObjectExtensions.CreateDebugSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2, 1f);
 
+            foreach (var hit in sphereHits)
+            {
+                var tile = hit.GetComponent<Tile>();
+                if (tile == null || tile == CurrentTile)
+                    continue;
+                return tile;
+            }
 
-        #endregion
+            return null;
+        }
 
         private bool StartMoveToNextTile()
         {
@@ -179,12 +233,11 @@ namespace Core
                 if (tile == null || tile == CurrentTile)
                     continue;
 
-                var tileDirection = GetClosestTileDirection(tile, transform.forward);
+                //var walkerEntryDirectionAligned = GetClosestTileDirection(tile, transform.forward);
                 
-
-                _quiting = false;
                 var prevCurrentTile = CurrentTile;
                 SetCurrentTile(tile);
+                CurrentTileState = TileState.Entering;
                 SetSubdestinationPointer(CurrentTile, tile.transform.position);
 
                 // On attach to a new tile
@@ -208,14 +261,19 @@ namespace Core
         private void StartQuitingTile()
         {
             Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
-            transform.rotation = Quaternion.LookRotation(closestDirection, CurrentTile.Up);
+            ChangeDirection(Quaternion.LookRotation(closestDirection, CurrentTile.Up));
 
-            _quiting = true;
+            CurrentTileState = TileState.Quiting;
             SetSubdestinationPointer(CurrentTile,
                 CurrentTile.transform.position + closestDirection * Tile.TileSize * 0.5f);
         }
 
-        private Vector3 GetClosestTileDirection(Tile tile, Vector3 direction)
+        private void ChangeDirection(Quaternion q)
+        {
+            transform.rotation = q;
+        }
+
+        public Vector3 GetClosestTileDirection(Tile tile, Vector3 direction)
         {
             Vector3[] directions =
             {
@@ -248,26 +306,24 @@ namespace Core
             SubDestinationPointer.transform.SetParent(parent.transform);
         }
 
-        internal float GetTimeToTileCenter()
+        public float GetTimeLeftToQuitCurrentTile()
         {
-            if (_quiting) 
-                return 0f;
-            var distance = Vector3.Distance(SubDestinationPointer.transform.position, transform.position);
-            return distance / CurrentSpeed;
+            if (CurrentTileState == TileState.Entering)
+            {
+                var distanceToCenter = Vector3.Distance(SubDestinationPointer.transform.position, transform.position);
+                return (distanceToCenter + Tile.TileSize * 0.5f ) / CurrentSpeed;
+            }
+            else if (CurrentTileState == TileState.Quiting)
+            {
+                var distanceToEdge = Vector3.Distance(SubDestinationPointer.transform.position, transform.position);
+                return distanceToEdge / CurrentSpeed;
+            }
+            return 0f;
         }
-
-        internal float GetTimeToTileEdge()
-        {
-            return Tile.TileSize * 0.5f / CurrentSpeed;
-        }
-        
     }
 
     public static class TileWalkerHelper
     {
-        public static float GetTimeLeftToQuitCurrentTile(this TileWalker tileWalker)
-        {
-            return tileWalker.GetTimeToTileCenter() + tileWalker.GetTimeToTileEdge();
-        }
+       
     }
 }

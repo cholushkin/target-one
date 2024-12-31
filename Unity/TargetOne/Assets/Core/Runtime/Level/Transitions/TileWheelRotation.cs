@@ -5,6 +5,10 @@ using DG.Tweening;
 using GameLib.Log;
 using NaughtyAttributes;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 
 public class TileWheelRotation : MonoBehaviour
 {
@@ -26,6 +30,38 @@ public class TileWheelRotation : MonoBehaviour
         Ease = Ease.InOutQuart;
     }
 
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        var wheelRotation = GetComponent<TileWheelRotation>();
+        if (wheelRotation)
+        {
+            Gizmos.color = Color.white;
+            Vector3 position = transform.position;
+            if (wheelRotation.Rotations == null)
+                return;
+            
+            var tile = GetComponent<Tile>();
+            if(!tile)
+                return;
+            
+            foreach (var rotation in wheelRotation.Rotations)
+            {
+                Gizmos.color = Color.white;
+                if (rotation.AddQuaternion == Quaternion.identity)
+                    Gizmos.color = Color.grey;
+
+                if (rotation.EnterTile)
+                {
+                    Gizmos.DrawLine(transform.position + tile.Up * 0.5f, rotation.EnterTile.transform.position);
+                    Handles.Label(rotation.EnterTile.transform.position, rotation.EnterTile.gameObject.name);                        
+                }
+            }
+            Gizmos.DrawLine(transform.position, transform.position + tile.Up * 0.5f);
+        }
+    }
+#endif
+
     [Button]
     public void Rotate()
     {
@@ -34,15 +70,6 @@ public class TileWheelRotation : MonoBehaviour
             LogChecker.PrintWarning(LogChecker.Level.Important, $"There is no registered Walker entered tile {name}");
             return;
         }
-
-        var item = Rotations.FirstOrDefault(i => i.EnterTile == _lastFromTile);
-        if (item == null)
-        {
-            LogChecker.PrintWarning(LogChecker.Level.Important, $"can't find {_lastFromTile.name} in defined rotations");
-            return;
-        }
-
-        var finalTargetRotation = transform.localRotation * item.AddQuaternion;
         
         // Get walker
         var walker = GetComponentInChildren<TileWalker>();
@@ -52,13 +79,53 @@ public class TileWheelRotation : MonoBehaviour
             return;
         }
 
-        // Get walker duration to walk through the tile
+        var currenTile = GetComponent<Tile>();
+
+
+        var item = Rotations.FirstOrDefault(i => i.EnterTile == _lastFromTile);
+        if (item == null)
+        {
+            LogChecker.PrintWarning(LogChecker.Level.Important,
+                $"can't find {_lastFromTile.name} in defined rotations");
+            return;
+        }
+        
+        
+
+        var finalTargetRotation = transform.localRotation * item.AddQuaternion;
+        
+        
+        // // Convert the local finalTargetRotation to a world rotation
+        // Quaternion worldFinalTargetRotation = transform.parent.rotation * finalTargetRotation; 
+        // Compute the tile's final world-space rotation
+        Quaternion worldFinalTargetRotation = transform.rotation * item.AddQuaternion;
+        var walkerEntryDirectionAligned = walker.GetClosestTileDirection(currenTile, walker.transform.forward);
+        //var walkerTargetDirectionAligned =  worldFinalTargetRotation * walkerEntryDirectionAligned;
+        var walkerTargetDirectionAligned = worldFinalTargetRotation * Quaternion.Inverse(transform.rotation) * walkerEntryDirectionAligned;
+
+        
+        walker.StickToTile = true;
+        
         var duration = walker.GetTimeLeftToQuitCurrentTile();
-        Debug.Log(duration);
+        
+        // Compute the world-space final rotation for the walker
+        Quaternion walkerFinalRotationWorld = Quaternion.LookRotation(
+            walkerTargetDirectionAligned,
+            currenTile.Up
+        );
+        
+        Debug.Log(walkerEntryDirectionAligned);
+        Debug.Log(walkerTargetDirectionAligned);
+        Debug.Log(walkerFinalRotationWorld.eulerAngles);
+        //Debug.Break();
+
+        walker.SmoothTileFollower.SetErpTarget(walkerFinalRotationWorld, duration);
+
 
 
         transform.DOLocalRotateQuaternion(finalTargetRotation, duration)
-            .SetEase(Ease);
+            .SetEase(Ease)
+            .OnComplete(() => walker.StickToTile = false);
     }
 
     public void RegisterEntering(Tile fromTile)

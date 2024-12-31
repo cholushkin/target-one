@@ -37,7 +37,7 @@ namespace Core
             ActiveRadius = 0.9f;
             PressDepth = 0.2f;
             PressDuration = 0.2f;
-            UnpressDuration = 0.4f;
+            UnpressDuration = 0.8f;
             PressEase = Ease.InBack;
             UnpressEase = Ease.OutElastic;
         }
