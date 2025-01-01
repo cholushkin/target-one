@@ -1,5 +1,6 @@
 using GameLib;
 using GameLib.Log;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -22,8 +23,22 @@ namespace Core
             Falling
         }
 
+        public class EventWalkerAttachToTile
+        {
+            public TileWalker TileWalker;
+            public Tile PrevTile;
+            public Tile CurrentTile;
+        }
+        
+        public class EventWalkerReachTileCenter
+        {
+            public TileWalker TileWalker;
+            public Tile Tile;
+        }
+
         #region Inspector-----------------------------------------------------------------------------------------------
         public LogChecker LogChecker;
+        public bool MoveOnStart;
         public GameObject SubDestinationPointer;
         public SmoothTileFollower SmoothTileFollower;
 
@@ -46,20 +61,26 @@ namespace Core
 
         private Tile _targetTile;
 
-        private State _currentState;
-        
         private StateMachine<State> _stateMachine;
+        private float _targetSpeed;
+        
+        // Reuse frequent event
+        private static readonly EventWalkerAttachToTile _eventWalkerAttachToTile = new EventWalkerAttachToTile();
+        private static readonly EventWalkerReachTileCenter _eventWalkerReachTileCenter = new EventWalkerReachTileCenter();
+        
 
         #region Unity callbacks ----------------------------------------------------------------------------------------
         public void Awake()
         {
+            Assert.IsNotNull(CurrentTile);
             Init(CurrentTile);
             _stateMachine = new StateMachine<State>(this, State.Standing);
         }
 
         public void Start()
         {
-            _stateMachine.GoTo(State.Walking);
+            if(MoveOnStart)
+                _stateMachine.GoTo(State.Walking);
         }
         
         private void Update()
@@ -103,15 +124,7 @@ namespace Core
         }
         #endregion -----------------------------------------------------------------------------------------------------
 
-        public void Init(Tile startTile)
-        {
-            Assert.IsNotNull(startTile);
-            SetCurrentTile(startTile);
-            transform.position = CurrentTile.gameObject.transform.position;
-            transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
-        }
-
-        #region State machine
+        #region State machine ------------------------------------------------------------------------------------------
         // ( OnEnter, OnUpdate, OnExit )
         private void OnEnterWalking()
         {
@@ -134,78 +147,58 @@ namespace Core
 
             // Calculate the remaining distance to the destination
             float remainingDistance = Vector3.Distance(transform.localPosition, SubDestinationPointer.transform.localPosition);
+            
+            // Move towards the destination
+            transform.localPosition += direction * distanceToMove;
 
             // Check if moving would overshoot the destination
             if (distanceToMove >= remainingDistance)
             {
-                // --- On reach tile edge
+                //  On reach tile edge
                 if (CurrentTileState == TileState.Quiting)
                 {
-                    
-                    if(StickToTile)
-                        Debug.LogWarning($"still rotating, left time: {GetTimeLeftToQuitCurrentTile()}");
-                    var tileChanged = StartMoveToNextTile();
-                    // if(!tileChanged)
-                    //     Debug.Log("waking up state");
-                    
-                }
-                // --- On reach center
-                else if (CurrentTileState == TileState.Entering)
-                {
-                    
-                    CurrentTile.GetComponent<TriggerTileReachCenter>()?.HitTriggerReachCenter(this);
-                    StartQuitingTile();
-
-                    // Set smooth look direction target
-                    if(SmoothTileFollower && !StickToTile)
+                    if (StickToTile)
                     {
-                        var nextTile = GetNextTile();
-                        if (nextTile)
-                        {
-                            // Minimum duration to reach next tile center from current tile center (in fact it could be greater but for ERP purposes it's OK)
-                            var minDuration = Tile.TileSize / CurrentSpeed;
-                            var nextTileCharMovementDirection = GetClosestTileDirection(nextTile, transform.forward);
-                            SmoothTileFollower.transform.rotation = Quaternion.LookRotation(GetClosestTileDirection(CurrentTile,transform.forward), CurrentTile.Up);
-                            SmoothTileFollower.SetErpTarget(Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up), minDuration);
-                        }
-                        else
-                        {
-                            SmoothTileFollower.transform.rotation = Quaternion.LookRotation(GetClosestTileDirection(CurrentTile,transform.forward), CurrentTile.Up);
-                            SmoothTileFollower.SetErpTarget(Quaternion.LookRotation(transform.forward, CurrentTile.Up), Tile.TileSize * 0.5f / CurrentSpeed);
-                        }
-                        
+                        Debug.LogWarning($"still rotating, left time: {GetTimeLeftToQuitCurrentTile()}");
+                    }
+                    else
+                    {
+                        var tileChanged = StartMoveToNextTile();
+                        // if(!tileChanged)
+                        //     Debug.Log("waking up state");
                     }
                 }
+                // On reach center
+                else if (CurrentTileState == TileState.Entering)
+                {
+                    PostWalkerReachTileCenterEvent(this, CurrentTile);
+                    StartQuitingTile();
+                }
             }
-
-            // Move towards the destination
-            transform.localPosition += direction * distanceToMove;
         }
         #endregion
-
-        // public void SetErpForRotation(float duration)
-        // {
-        //     OnSetErpTarget(Quaternion.LookRotation(transform.forward, CurrentTile.Up), Tile.TileSize * 0.5f / CurrentSpeed);
-        // }
         
-        private void SetCurrentTile(Tile tile)
+        public void Init(Tile startTile)
         {
-            CurrentTile = tile;
-            ChangeDirection(Quaternion.LookRotation(GetClosestTileDirection(CurrentTile, transform.forward), CurrentTile.Up));
-            transform.SetParent(tile.transform);
-            // if(SmoothTileFollower)
-            //     SmoothTileFollower.transform.SetParent(tile.transform);
+            // Set current tile
+            Assert.IsNotNull(startTile);
+            CurrentTile = startTile;
+            
+            // Set position and parents
+            transform.position = CurrentTile.transform.position;
+            transform.SetParent(CurrentTile.transform);
+            if(SmoothTileFollower)
+                SmoothTileFollower.transform.SetParent(CurrentTile.transform);
+            
+            // Set rotation to tile forward
+            transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
+            if (SmoothTileFollower)
+                SmoothTileFollower.Init(transform.position, transform.rotation);
         }
-
         
-        // Note: works only when SubDestinationPointer is set on the exit of the tile
         private Tile GetNextTile()
         {
             var sphereHits = Physics.OverlapSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2);
-            
-            // if (LogChecker.Gizmos)
-            //      GameObjectExtensions.CreateDebugSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2, 1f);
-
             foreach (var hit in sphereHits)
             {
                 var tile = hit.GetComponent<Tile>();
@@ -213,64 +206,90 @@ namespace Core
                     continue;
                 return tile;
             }
-
             return null;
         }
 
         private bool StartMoveToNextTile()
         {
-            // Find next tile
-            var sphereHits = Physics.OverlapSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2);
+            var nextTile = GetNextTile();
 
-            if (LogChecker.Gizmos)
-            {
-                // GameObjectExtensions.CreateDebugSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2, 1f);
-            }
-
-            foreach (var hit in sphereHits)
-            {
-                var tile = hit.GetComponent<Tile>();
-                if (tile == null || tile == CurrentTile)
-                    continue;
-
-                //var walkerEntryDirectionAligned = GetClosestTileDirection(tile, transform.forward);
+            if (!nextTile) 
+                return false;
+            
+            var prevCurrentTile = CurrentTile;
+            CurrentTile = nextTile;
+            CurrentTileState = TileState.Entering;
                 
-                var prevCurrentTile = CurrentTile;
-                SetCurrentTile(tile);
-                CurrentTileState = TileState.Entering;
-                SetSubdestinationPointer(CurrentTile, tile.transform.position);
-
-                // On attach to a new tile
-                {
-                    CurrentTile.GetComponent<TileWheelRotation>()
-                        ?.RegisterEntering(prevCurrentTile);
-
-                    prevCurrentTile.GetComponent<TriggerTileExit>()
-                        ?.HitTriggerExit(this);
-
-                    CurrentTile.GetComponent<TriggerTileEnter>()
-                        ?.HitTriggerEnter(this);
-                }
-
-                return true;
+            SetSubdestinationPointer(CurrentTile, CurrentTile.transform.position);
+            
+            Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
+            transform.rotation = Quaternion.LookRotation(closestDirection, CurrentTile.Up); // For walker: same look direction as a next tile 
+                
+            // Set new parents
+            transform.SetParent(CurrentTile.transform);
+            if (SmoothTileFollower)
+            {
+                // Reparent SmoothTileFollower rotation pointers
+                SmoothTileFollower.ReparentRotationPointers(CurrentTile.transform);
+                SmoothTileFollower.transform.SetParent(CurrentTile.transform);
             }
 
-            return false;
+            PostWalkerAttachToTileEvent(this, prevCurrentTile, CurrentTile);
+            return true;
         }
+
 
         private void StartQuitingTile()
         {
-            Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
-            ChangeDirection(Quaternion.LookRotation(closestDirection, CurrentTile.Up));
-
             CurrentTileState = TileState.Quiting;
-            SetSubdestinationPointer(CurrentTile,
-                CurrentTile.transform.position + closestDirection * Tile.TileSize * 0.5f);
+            
+            // Set SubdestinationPointer 
+            Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
+            SetSubdestinationPointer(CurrentTile, CurrentTile.transform.position + closestDirection * Tile.TileSize * 0.5f);
+            
+            // Set rotation
+            transform.rotation = Quaternion.LookRotation(closestDirection, CurrentTile.Up); // For walker: look to tile exit
+            if (SmoothTileFollower && !StickToTile)
+            {
+                // For SmoothTileFollower we need to set TargetRotation to next tile rotation
+                var nextTile = GetNextTile();
+                if (nextTile)
+                {
+                    // Minimum duration to reach next tile center from current tile center (in fact it could be greater but for ERP purposes it's OK)
+                    var minDuration = Tile.TileSize / CurrentSpeed;
+                    var nextTileCharMovementDirection = GetClosestTileDirection(nextTile, transform.forward);
+                    SmoothTileFollower.SetInterpolationSegment(
+                        Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up),
+                        CurrentTile.transform,
+                        nextTile.transform.position, 
+                        minDuration);
+                }
+                else
+                {
+                    // Probably we're going to fall, set as if the next tile has same rotation (don't need to update TargetRotation)
+                }
+                
+            }
         }
-
-        private void ChangeDirection(Quaternion q)
+        
+        public void RecalculateSmoothRotationTarget()
         {
-            transform.rotation = q;
+            if (!SmoothTileFollower)
+                return;
+            
+            var nextTile = GetNextTile();
+            if (nextTile)
+            {
+                // Minimum duration to reach next tile center from current tile center (in fact it could be greater but for ERP purposes it's OK)
+                var minDuration = Tile.TileSize * 0.5f / CurrentSpeed;
+                var nextTileCharMovementDirection = GetClosestTileDirection(nextTile, transform.forward);
+                SmoothTileFollower.SetInterpolationSegment(
+                    Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up),
+                    CurrentTile.transform,
+                    nextTile.transform.position, 
+                    minDuration);
+            }
+
         }
 
         public Vector3 GetClosestTileDirection(Tile tile, Vector3 direction)
@@ -300,9 +319,9 @@ namespace Core
             return closestDirection;
         }
 
-        private void SetSubdestinationPointer(Tile parent, Vector3 posistion)
+        private void SetSubdestinationPointer(Tile parent, Vector3 position)
         {
-            SubDestinationPointer.transform.position = posistion;
+            SubDestinationPointer.transform.position = position;
             SubDestinationPointer.transform.SetParent(parent.transform);
         }
 
@@ -320,10 +339,20 @@ namespace Core
             }
             return 0f;
         }
-    }
+        
+        private static void PostWalkerAttachToTileEvent(TileWalker tileWalker, Tile prevTile, Tile currentTile)
+        {
+            _eventWalkerAttachToTile.TileWalker = tileWalker;
+            _eventWalkerAttachToTile.PrevTile = prevTile;
+            _eventWalkerAttachToTile.CurrentTile = currentTile;
+            GlobalEventAggregator.EventAggregator.Publish(_eventWalkerAttachToTile);
+        }
 
-    public static class TileWalkerHelper
-    {
-       
+        private static void PostWalkerReachTileCenterEvent(TileWalker tileWalker, Tile tile)
+        {
+            _eventWalkerReachTileCenter.TileWalker = tileWalker;
+            _eventWalkerReachTileCenter.Tile = tile;
+            GlobalEventAggregator.EventAggregator.Publish(_eventWalkerReachTileCenter);
+        }
     }
 }

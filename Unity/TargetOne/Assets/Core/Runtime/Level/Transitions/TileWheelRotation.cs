@@ -79,9 +79,6 @@ public class TileWheelRotation : MonoBehaviour
             return;
         }
 
-        var currenTile = GetComponent<Tile>();
-
-
         var item = Rotations.FirstOrDefault(i => i.EnterTile == _lastFromTile);
         if (item == null)
         {
@@ -89,48 +86,25 @@ public class TileWheelRotation : MonoBehaviour
                 $"can't find {_lastFromTile.name} in defined rotations");
             return;
         }
-        
-        
 
         var finalTargetRotation = transform.localRotation * item.AddQuaternion;
-        
-        
-        // // Convert the local finalTargetRotation to a world rotation
-        // Quaternion worldFinalTargetRotation = transform.parent.rotation * finalTargetRotation; 
-        // Compute the tile's final world-space rotation
-        Quaternion worldFinalTargetRotation = transform.rotation * item.AddQuaternion;
-        var walkerEntryDirectionAligned = walker.GetClosestTileDirection(currenTile, walker.transform.forward);
-        //var walkerTargetDirectionAligned =  worldFinalTargetRotation * walkerEntryDirectionAligned;
-        var walkerTargetDirectionAligned = worldFinalTargetRotation * Quaternion.Inverse(transform.rotation) * walkerEntryDirectionAligned;
-
-        
+        var duration = walker.GetTimeLeftToQuitCurrentTile() * 0.9f;
         walker.StickToTile = true;
-        
-        var duration = walker.GetTimeLeftToQuitCurrentTile();
-        
-        // Compute the world-space final rotation for the walker
-        Quaternion walkerFinalRotationWorld = Quaternion.LookRotation(
-            walkerTargetDirectionAligned,
-            currenTile.Up
-        );
-        
-        Debug.Log(walkerEntryDirectionAligned);
-        Debug.Log(walkerTargetDirectionAligned);
-        Debug.Log(walkerFinalRotationWorld.eulerAngles);
-        //Debug.Break();
-
-        walker.SmoothTileFollower.SetErpTarget(walkerFinalRotationWorld, duration);
-
-
 
         transform.DOLocalRotateQuaternion(finalTargetRotation, duration)
             .SetEase(Ease)
-            .OnComplete(() => walker.StickToTile = false);
+            .OnComplete(() => OnCompleteRotation(walker));
     }
 
     public void RegisterEntering(Tile fromTile)
     {
         LogChecker.Print(LogChecker.Level.Normal, $"Entering from: {fromTile.name}");
         _lastFromTile = fromTile;
+    }
+
+    private void OnCompleteRotation(TileWalker walker)
+    {
+        walker.StickToTile = false;
+        walker.RecalculateSmoothRotationTarget();
     }
 }
