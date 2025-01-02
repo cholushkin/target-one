@@ -1,3 +1,4 @@
+using System;
 using GameLib;
 using GameLib.Log;
 using NaughtyAttributes;
@@ -13,12 +14,12 @@ namespace Core
         {
             Walking,
             Standing,
-            Falling
+            Awake
         }
 
         public enum TileState
         {
-            Entering, 
+            Entering,
             Quiting,
             Falling
         }
@@ -29,21 +30,42 @@ namespace Core
             public Tile PrevTile;
             public Tile CurrentTile;
         }
-        
+
         public class EventWalkerReachTileCenter
         {
             public TileWalker TileWalker;
             public Tile Tile;
         }
 
+        public class EventStartFalling
+        {
+            public TileWalker TileWalker;
+            public float Duration;
+        }
+
+        public class EventFall
+        {
+            public TileWalker TileWalker;
+        }
+
+        public class EventFallRecover
+        {
+            public TileWalker TileWalker;
+            public float Duration;
+        }
+
+
         #region Inspector-----------------------------------------------------------------------------------------------
+
         public LogChecker LogChecker;
         public bool MoveOnStart;
         public GameObject SubDestinationPointer;
         public SmoothTileFollower SmoothTileFollower;
 
         [Tooltip("Movement speed (units per second).")]
-        public float Speed = 2.0f;
+        public float TargetSpeed = 2.0f;
+
+        public float VelocitySmoothTime = 0.2f;
 
         [Tooltip("Maximum elevation difference to consider a tile reachable.")]
         public float MaxElevationThreshold = 0.5f;
@@ -55,21 +77,26 @@ namespace Core
 
         #endregion -----------------------------------------------------------------------------------------------------
 
-        public float CurrentSpeed => Speed * GameSession.Instance.GameSpeed;
+        public float CurrentSpeed => TargetSpeed * GameSession.Instance.GameSpeed;
         public bool StickToTile { get; set; }
         public TileState CurrentTileState { get; set; }
 
         private Tile _targetTile;
 
         private StateMachine<State> _stateMachine;
-        private float _targetSpeed;
-        
+        [ShowNonSerializedField] private float _velocity;
+        private float _velocityChangeRate;
+        private float _speedBeforeStartFalling;
+
         // Reuse frequent event
         private static readonly EventWalkerAttachToTile _eventWalkerAttachToTile = new EventWalkerAttachToTile();
-        private static readonly EventWalkerReachTileCenter _eventWalkerReachTileCenter = new EventWalkerReachTileCenter();
-        
+
+        private static readonly EventWalkerReachTileCenter _eventWalkerReachTileCenter =
+            new EventWalkerReachTileCenter();
+
 
         #region Unity callbacks ----------------------------------------------------------------------------------------
+
         public void Awake()
         {
             Assert.IsNotNull(CurrentTile);
@@ -77,20 +104,26 @@ namespace Core
             _stateMachine = new StateMachine<State>(this, State.Standing);
         }
 
+        public void Reset()
+        {
+            TargetSpeed = 2f;
+            VelocitySmoothTime = 0.3f;
+        }
+
         public void Start()
         {
-            if(MoveOnStart)
+            if (MoveOnStart)
                 _stateMachine.GoTo(State.Walking);
         }
-        
+
         private void Update()
         {
             _stateMachine.Update();
         }
-        
+
         private void OnDrawGizmos()
         {
-            if (!Application.isPlaying) 
+            if (!Application.isPlaying)
                 return;
 
             // Draw 3 axes (forward, up, right) as arrows
@@ -108,11 +141,11 @@ namespace Core
 
             // Red color for falling state
             Gizmos.color = Color.red;
-            if(CurrentTileState == TileState.Quiting)
+            if (CurrentTileState == TileState.Quiting)
                 Gizmos.color = Color.yellow;
-            else if(CurrentTileState == TileState.Entering)
+            else if (CurrentTileState == TileState.Entering)
                 Gizmos.color = Color.green;
-            
+
             Gizmos.DrawSphere(transform.position, 0.2f);
 
             // Draw SubDestinationPointer position as a wire sphere
@@ -122,9 +155,11 @@ namespace Core
                 Gizmos.DrawWireSphere(SubDestinationPointer.transform.position, 0.2f);
             }
         }
+
         #endregion -----------------------------------------------------------------------------------------------------
 
         #region State machine ------------------------------------------------------------------------------------------
+
         // ( OnEnter, OnUpdate, OnExit )
         private void OnEnterWalking()
         {
@@ -139,15 +174,20 @@ namespace Core
 
         private void OnUpdateWalking()
         {
+            // Update velocity
+            _velocity = Mathf.SmoothDamp(_velocity, TargetSpeed, ref _velocityChangeRate, VelocitySmoothTime);
+            var finalVelocity = _velocity * GameSession.Instance.GameSpeed;
+
             // Calculate the direction to the destination
             Vector3 direction = (SubDestinationPointer.transform.localPosition - transform.localPosition).normalized;
 
             // Calculate the distance to move this frame
-            float distanceToMove = CurrentSpeed * Time.deltaTime;
+            float distanceToMove = finalVelocity * Time.deltaTime;
 
             // Calculate the remaining distance to the destination
-            float remainingDistance = Vector3.Distance(transform.localPosition, SubDestinationPointer.transform.localPosition);
-            
+            float remainingDistance =
+                Vector3.Distance(transform.localPosition, SubDestinationPointer.transform.localPosition);
+
             // Move towards the destination
             transform.localPosition += direction * distanceToMove;
 
@@ -159,13 +199,20 @@ namespace Core
                 {
                     if (StickToTile)
                     {
-                        Debug.LogWarning($"still rotating, left time: {GetTimeLeftToQuitCurrentTile()}");
+                        // Note: here we already overshoot the target (SubDestinationPointer on the edge of the tile).
+                        // Next step will be move back to the tile center direction then cross the edge again and so on
+                        // SmoothFollower will fix wiggling effect. It should happen very rarely due to frame drop 
+
+                        Debug.LogWarning(
+                            $"Reach the edge while tile is still rotating. vel:{_velocity} tgSpeed:{TargetSpeed}");
                     }
                     else
                     {
                         var tileChanged = StartMoveToNextTile();
-                        // if(!tileChanged)
-                        //     Debug.Log("waking up state");
+                        if (!tileChanged)
+                        {
+                            StartFalling();
+                        }
                     }
                 }
                 // On reach center
@@ -174,28 +221,48 @@ namespace Core
                     PostWalkerReachTileCenterEvent(this, CurrentTile);
                     StartQuitingTile();
                 }
+                // On reach falling point
+                else if (CurrentTileState == TileState.Falling)
+                {
+                    // Save check (in case there is some animation that brought the tile under the butt of the character
+                    var saveTile = GetNextTile();
+                    if (saveTile)
+                    {
+                        FallRecover(saveTile);
+                    }
+                    else // Final fall
+                    {
+                        _stateMachine.GoTo(State.Awake);
+                    }
+                }
             }
         }
+
+        void OnEnterAwake()
+        {
+            GlobalEventAggregator.EventAggregator.Publish(new EventFall()); // start lowering hovering height on visual
+        }
+
         #endregion
-        
+
         public void Init(Tile startTile)
         {
             // Set current tile
             Assert.IsNotNull(startTile);
             CurrentTile = startTile;
-            
+
             // Set position and parents
             transform.position = CurrentTile.transform.position;
             transform.SetParent(CurrentTile.transform);
-            if(SmoothTileFollower)
+            if (SmoothTileFollower)
                 SmoothTileFollower.transform.SetParent(CurrentTile.transform);
-            
+
             // Set rotation to tile forward
             transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
             if (SmoothTileFollower)
                 SmoothTileFollower.Init(transform.position, transform.rotation);
         }
-        
+
         private Tile GetNextTile()
         {
             var sphereHits = Physics.OverlapSphere(SubDestinationPointer.transform.position, Tile.TileSize / 2);
@@ -206,6 +273,7 @@ namespace Core
                     continue;
                 return tile;
             }
+
             return null;
         }
 
@@ -213,18 +281,20 @@ namespace Core
         {
             var nextTile = GetNextTile();
 
-            if (!nextTile) 
+            if (!nextTile)
                 return false;
-            
+
             var prevCurrentTile = CurrentTile;
             CurrentTile = nextTile;
             CurrentTileState = TileState.Entering;
-                
+
             SetSubdestinationPointer(CurrentTile, CurrentTile.transform.position);
-            
+
             Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
-            transform.rotation = Quaternion.LookRotation(closestDirection, CurrentTile.Up); // For walker: same look direction as a next tile 
-                
+            transform.rotation =
+                Quaternion.LookRotation(closestDirection,
+                    CurrentTile.Up); // For walker: same look direction as a next tile 
+
             // Set new parents
             transform.SetParent(CurrentTile.transform);
             if (SmoothTileFollower)
@@ -242,13 +312,15 @@ namespace Core
         private void StartQuitingTile()
         {
             CurrentTileState = TileState.Quiting;
-            
+
             // Set SubdestinationPointer 
             Vector3 closestDirection = GetClosestTileDirection(CurrentTile, transform.forward);
-            SetSubdestinationPointer(CurrentTile, CurrentTile.transform.position + closestDirection * Tile.TileSize * 0.5f);
-            
+            SetSubdestinationPointer(CurrentTile,
+                CurrentTile.transform.position + closestDirection * Tile.TileSize * 0.5f);
+
             // Set rotation
-            transform.rotation = Quaternion.LookRotation(closestDirection, CurrentTile.Up); // For walker: look to tile exit
+            transform.rotation =
+                Quaternion.LookRotation(closestDirection, CurrentTile.Up); // For walker: look to tile exit
             if (SmoothTileFollower && !StickToTile)
             {
                 // For SmoothTileFollower we need to set TargetRotation to next tile rotation
@@ -261,22 +333,48 @@ namespace Core
                     SmoothTileFollower.SetInterpolationSegment(
                         Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up),
                         CurrentTile.transform,
-                        nextTile.transform.position, 
+                        nextTile.transform.position,
                         minDuration);
                 }
                 else
                 {
                     // Probably we're going to fall, set as if the next tile has same rotation (don't need to update TargetRotation)
                 }
-                
             }
         }
-        
+
+        private void StartFalling()
+        {
+            CurrentTileState = TileState.Falling;
+            _speedBeforeStartFalling = TargetSpeed;
+            TargetSpeed = 0f;
+            var fallingPoint = CurrentTile.transform.position +
+                               GetClosestTileDirection(CurrentTile, transform.forward) * Tile.TileSize;
+            SetSubdestinationPointer(CurrentTile, fallingPoint);
+            GlobalEventAggregator.EventAggregator.Publish(new EventStartFalling
+            {
+                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSession.Instance.GameSpeed )
+            }); // start lowering hovering height on visual
+        }
+
+        private void FallRecover(Tile saveTile)
+        {
+            CurrentTile = saveTile;
+            transform.SetParent(CurrentTile.transform);
+            GlobalEventAggregator.EventAggregator.Publish(new EventFallRecover
+            {
+                TileWalker = this,
+                Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSession.Instance.GameSpeed)
+            });
+            StartQuitingTile();
+            TargetSpeed = _speedBeforeStartFalling;
+        }
+
         public void RecalculateSmoothRotationTarget()
         {
             if (!SmoothTileFollower)
                 return;
-            
+
             var nextTile = GetNextTile();
             if (nextTile)
             {
@@ -286,10 +384,9 @@ namespace Core
                 SmoothTileFollower.SetInterpolationSegment(
                     Quaternion.LookRotation(nextTileCharMovementDirection, nextTile.Up),
                     CurrentTile.transform,
-                    nextTile.transform.position, 
+                    nextTile.transform.position,
                     minDuration);
             }
-
         }
 
         public Vector3 GetClosestTileDirection(Tile tile, Vector3 direction)
@@ -330,16 +427,19 @@ namespace Core
             if (CurrentTileState == TileState.Entering)
             {
                 var distanceToCenter = Vector3.Distance(SubDestinationPointer.transform.position, transform.position);
-                return (distanceToCenter + Tile.TileSize * 0.5f ) / CurrentSpeed;
+                return (distanceToCenter + Tile.TileSize * 0.5f) / CurrentSpeed;
             }
             else if (CurrentTileState == TileState.Quiting)
             {
                 var distanceToEdge = Vector3.Distance(SubDestinationPointer.transform.position, transform.position);
                 return distanceToEdge / CurrentSpeed;
             }
+
             return 0f;
         }
-        
+
+        public float GetTimeToPassThroughTile() => Tile.TileSize / CurrentSpeed;
+
         private static void PostWalkerAttachToTileEvent(TileWalker tileWalker, Tile prevTile, Tile currentTile)
         {
             _eventWalkerAttachToTile.TileWalker = tileWalker;

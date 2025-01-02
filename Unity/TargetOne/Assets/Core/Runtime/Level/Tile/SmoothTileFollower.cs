@@ -14,6 +14,8 @@ public class SmoothTileFollower : MonoBehaviour
     public Transform RotationDestinationPointer; 
     public Transform RotationSourcePointer;
 
+    public bool EnableDoubleRotationSmooth;
+
     private Vector3 _smoothPosition;
     private float _segmentDuration;
     private float _currentSegmentTime;
@@ -81,6 +83,11 @@ public class SmoothTileFollower : MonoBehaviour
                 transform.rotation = RotationDestinationPointer.rotation;
             else
                 transform.rotation = Quaternion.Slerp(RotationSourcePointer.rotation, RotationDestinationPointer.rotation, _currentSegmentTime / _segmentDuration);
+
+            if (EnableDoubleRotationSmooth)
+            {
+                
+            }
         }
         else
         {
