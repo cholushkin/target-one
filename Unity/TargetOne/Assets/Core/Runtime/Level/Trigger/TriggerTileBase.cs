@@ -25,6 +25,7 @@ public class TriggerTileBase : TriggerBase
     {
         base.Reset();
         ActiveRadius = 1f;
+        OneHitMaxPerVisit = true;
     }
 
     // Returns true if actually activated
