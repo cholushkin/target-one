@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TileManager : MonoBehaviour
     , IHandle<TileWalker.EventWalkerAttachToTile>
+    , IHandle<TileWalker.EventWalkerDetachFromTile>
     , IHandle<TileWalker.EventWalkerReachTileCenter>
 {
     void Awake()
@@ -13,20 +14,31 @@ public class TileManager : MonoBehaviour
 
     public void Handle(TileWalker.EventWalkerAttachToTile message)
     {
-        // On attach to a new tile
-        message.CurrentTile.GetComponent<TileWheelRotation>()
-            ?.RegisterEntering(message.PrevTile);
-
-        message.PrevTile.GetComponent<TriggerTileExit>()
-            ?.HitTriggerExit(message.TileWalker);
-
-        message.CurrentTile.GetComponent<TriggerTileEnter>()
-            ?.HitTriggerEnter(message.TileWalker);
+        // Register enter for all TriggerTileBase of the current tile
+        var baseTileTriggers = message.CurrentTile.GetComponents<TriggerTileBase>();
+        foreach (var triggerTileBase in baseTileTriggers)
+        {
+            triggerTileBase.RegisterWalkerEnter(message.TileWalker, message.PrevTile);
+            (triggerTileBase as TriggerTileEnter)?.Trigger(message.TileWalker);
+        }
     }
 
     public void Handle(TileWalker.EventWalkerReachTileCenter message)
     {
-        message.Tile.GetComponent<TriggerTileReachCenter>()
-            ?.HitTriggerReachCenter(message.TileWalker);
+        // Trigger all TriggerTileReachCenter of the current tile
+        var triggersTileReachCenter = message.Tile.GetComponents<TriggerTileReachCenter>();
+        foreach (var triggerTileReachCenter in triggersTileReachCenter)
+            triggerTileReachCenter.Trigger(message.TileWalker);
+    }
+
+    public void Handle(TileWalker.EventWalkerDetachFromTile message)
+    {
+        // Register exit for all TriggerTileBase of the current tile
+        var baseTileTriggers = message.DetachedTile.GetComponents<TriggerTileBase>();
+        foreach (var triggerTileBase in baseTileTriggers)
+        {
+            triggerTileBase.RegisterWalkerExit(message.TileWalker);
+            (triggerTileBase as TriggerTileExit)?.Trigger(message.TileWalker);
+        }
     }
 }

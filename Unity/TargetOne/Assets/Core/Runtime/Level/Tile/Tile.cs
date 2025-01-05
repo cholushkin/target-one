@@ -1,4 +1,5 @@
 using Core;
+using GameLib.Alg;
 using GameLib.Log;
 using NaughtyAttributes;
 using UnityEditor;
@@ -41,7 +42,7 @@ public class Tile : MonoBehaviour
     
     #if UNITY_EDITOR
     [Button]
-    private void CreateButton()
+    private void CreateTileWheelRotation()
     {
         // TileWheelRotation
         var tileWheelRotation = GetComponent<TileWheelRotation>();
@@ -50,22 +51,29 @@ public class Tile : MonoBehaviour
             tileWheelRotation = gameObject.AddComponent<TileWheelRotation>();
             Debug.Log("Added TileWheelRotation component.");
         }
+        else
+        {
+            Debug.LogWarning($"TileWheelRotation component is already presented on {gameObject.transform.GetDebugName()}");
+        }
 
         // TriggerTileButton
         var triggerTileButton = GetComponent<TriggerTileButton>();
         if (triggerTileButton == null)
         {
             triggerTileButton = gameObject.AddComponent<TriggerTileButton>();
-            triggerTileButton.MaxHitCount = 1;
+            triggerTileButton.MaxHitCount = -1;
+            triggerTileButton.OneHitMaxPerVisit = true;
 
             var visual = transform.Find("Visual");
+            TileButtonAnimator tileButtonAnimator = null;
             if (visual)
             {
                 foreach (Transform t in visual.transform)
                 {
                     if (!t.gameObject.name.StartsWith("Button")) 
                         continue;
-                    triggerTileButton.ButtonTransform = t;
+                    tileButtonAnimator = visual.gameObject.AddComponent<TileButtonAnimator>();
+                    tileButtonAnimator.ButtonTransform = t;
                     break;
                 }
             }
@@ -74,20 +82,83 @@ public class Tile : MonoBehaviour
             triggerTileButton.Handlers ??= new UnityEvent();
 
             // Add listener
+            if(tileButtonAnimator)
+                UnityEventTools.AddPersistentListener(triggerTileButton.Handlers, tileButtonAnimator.AnimateButtonClick);
+            else
+            {
+                Debug.LogWarning("No Button visual presented");
+            }
             UnityEventTools.AddPersistentListener(triggerTileButton.Handlers, tileWheelRotation.Rotate);
             Debug.Log("Added TriggerTileButton component and assigned listener.");
         }
-
-        // TriggerTileExit
-        var triggerTileExit = GetComponent<TriggerTileExit>();
-        if (triggerTileExit == null)
+        else
         {
-            triggerTileExit = gameObject.AddComponent<TriggerTileExit>();
-            triggerTileExit.Handlers ??= new UnityEvent();
-            
-            UnityEventTools.AddPersistentListener(triggerTileExit.Handlers, triggerTileButton.ResetTriggerCount);
-            Debug.Log("Added TriggerTileExit component.");
+            Debug.LogWarning($"TriggerTileButton component is already presented on {gameObject.transform.GetDebugName()}");
         }
+        
+        Debug.Log("Tile button has been created. Don't forget to assign TileWheelRotation.Rotations");
+    }
+    
+    
+    [Button]
+    private void CreateTubeTeleport()
+    {
+        // CreateTubeTeleport
+        var tubeTeleport = GetComponent<TubeTeleport>();
+        if (tubeTeleport == null)
+        {
+            tubeTeleport = gameObject.AddComponent<TubeTeleport>();
+            tubeTeleport.Tile = this;
+            Debug.Log("Added TubeTeleport component.");
+        }
+        else
+        {
+            Debug.LogWarning($"TubeTeleport component is already presented on {gameObject.transform.GetDebugName()}");
+        }
+
+        // TriggerTubeTeleport
+        var triggerTubeTeleport = GetComponent<TriggerTubeTeleport>();
+        
+        if (triggerTubeTeleport == null)
+        {
+            TubeTeleportAnimator tAnimator = null;
+            triggerTubeTeleport = gameObject.AddComponent<TriggerTubeTeleport>();
+            triggerTubeTeleport.MaxHitCount = -1;
+            triggerTubeTeleport.OneHitMaxPerVisit = true;
+
+            var visual = transform.Find("Visual");
+            if (visual)
+            {
+                if (visual.gameObject.GetComponent<TubeTeleportAnimator>() == null)
+                {
+                    tAnimator = visual.gameObject.AddComponent<TubeTeleportAnimator>();
+                    tubeTeleport.TubeAnimator = tAnimator;
+                    Debug.Log("Added TubeTeleportAnimator component.");
+                }
+                
+                foreach (Transform t in visual.transform)
+                {
+                    if (!t.gameObject.name.StartsWith("Cylinder")) 
+                        continue;
+                    tAnimator.Cylinder = t;
+                    break;
+                }
+            }
+
+            // Initialize UnityEvent if needed
+            triggerTubeTeleport.Handlers ??= new UnityEvent();
+
+            // Add listener
+            UnityEventTools.AddPersistentListener(triggerTubeTeleport.Handlers, tubeTeleport.StartTeleporting);
+            UnityEventTools.AddPersistentListener(triggerTubeTeleport.Handlers, tAnimator.AnimateSuckInside);
+            Debug.Log("Added TriggerTubeTeleport component and assigned listener TubeTeleport.StartTeleporting.");
+        }
+        else
+        {
+            Debug.LogWarning($"TriggerTubeTeleport component is already presented on {gameObject.transform.GetDebugName()}");
+        }
+        
+        Debug.Log("Tube teleport has been created. Don't forget to assign TubeTeleport.ConnectedTube");
     }
     #endif
 }

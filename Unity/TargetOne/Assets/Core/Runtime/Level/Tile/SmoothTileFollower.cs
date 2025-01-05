@@ -31,6 +31,9 @@ public class SmoothTileFollower : MonoBehaviour
         Assert.IsNotNull(Walker);
         transform.position = _smoothPosition = position;
         transform.rotation = rotation;
+
+        RotationDestinationPointer.position = RotationSourcePointer.position = transform.position;
+        RotationDestinationPointer.rotation = RotationSourcePointer.rotation = transform.rotation;
     }
 
     void Update()

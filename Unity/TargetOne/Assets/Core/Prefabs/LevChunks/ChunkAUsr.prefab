@@ -835,6 +835,7 @@ GameObject:
   - component: {fileID: 1842305737654310174}
   - component: {fileID: 6851876224374659487}
   - component: {fileID: 2211404133603491578}
+  - component: {fileID: 8744068764598014874}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -911,6 +912,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8744068764598014874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 733008820291762045}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d174902319150a948adf561869cf4329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cylinder: {fileID: 7686424258586081890}
 --- !u!1 &773544809271531900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1159,8 +1173,7 @@ GameObject:
   - component: {fileID: 950361704831096821}
   - component: {fileID: 6208681558219720033}
   - component: {fileID: 2869535910668698812}
-  - component: {fileID: 5699001879453910753}
-  - component: {fileID: 8457648755068205000}
+  - component: {fileID: 4194839044411786545}
   m_Layer: 0
   m_Name: Tile.021
   m_TagString: Untagged
@@ -1261,7 +1274,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 4600044526034520881}
     AddQuaternion: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &5699001879453910753
+--- !u!114 &4194839044411786545
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1286,11 +1299,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 6248691508934152307}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2869535910668698812}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -1305,57 +1330,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 5639488634124250059}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &8457648755068205000
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915582893984542892}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5699001879453910753}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.84
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &927576478028562962
 GameObject:
   m_ObjectHideFlags: 0
@@ -1785,6 +1764,7 @@ GameObject:
   - component: {fileID: 2087587544294556184}
   - component: {fileID: 3961831064231986710}
   - component: {fileID: 7154256407957335551}
+  - component: {fileID: 3764888219463474112}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -1861,6 +1841,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3764888219463474112
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249491700370071892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 1624764138334151003}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &1369994238042878474
 GameObject:
   m_ObjectHideFlags: 0
@@ -2046,7 +2044,6 @@ GameObject:
   - component: {fileID: 1211618685442750353}
   - component: {fileID: 2784902529728341540}
   - component: {fileID: 4169184802664852702}
-  - component: {fileID: 3960213972524928717}
   m_Layer: 0
   m_Name: Tile.001
   m_TagString: Untagged
@@ -2174,11 +2171,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 2191142851909031454}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 2784902529728341540}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -2193,57 +2202,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 3535307518888716226}
-  PressDepth: 0.2
-  PressDuration: 0.4
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
+  HitCount: 0
+  OneHitMaxPerVisit: 1
   ActiveRadius: 0.9
---- !u!114 &3960213972524928717
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1671750720025980578}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 4169184802664852702}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &1707449754439620963
 GameObject:
   m_ObjectHideFlags: 0
@@ -2342,8 +2305,7 @@ GameObject:
   - component: {fileID: 9061168768279598349}
   - component: {fileID: 5749158284894000774}
   - component: {fileID: 7467497224024360742}
-  - component: {fileID: 711612538532058518}
-  - component: {fileID: 588520246026233631}
+  - component: {fileID: 4249929813870375833}
   m_Layer: 0
   m_Name: Tile.015 (1)
   m_TagString: Untagged
@@ -2442,7 +2404,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 6517389357329263459}
     AddQuaternion: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   Ease: 13
---- !u!114 &711612538532058518
+--- !u!114 &4249929813870375833
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2467,11 +2429,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8955521852762445509}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7467497224024360742}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -2486,57 +2460,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 1528338963898188216}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
+  HitCount: 0
+  OneHitMaxPerVisit: 1
   ActiveRadius: 0.9
---- !u!114 &588520246026233631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1802883067537018074}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 711612538532058518}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &1832141344801686894
 GameObject:
   m_ObjectHideFlags: 0
@@ -2788,7 +2716,8 @@ GameObject:
   - component: {fileID: 3643734801871547659}
   - component: {fileID: 5634123799578493585}
   - component: {fileID: 1545351487157856045}
-  - component: {fileID: 7851393034129907934}
+  - component: {fileID: 4901024765070790373}
+  - component: {fileID: 4581266376867977761}
   m_Layer: 0
   m_Name: Tile.028
   m_TagString: Untagged
@@ -2804,14 +2733,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2075429713400886780}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.7071067, w: 0.7071068}
+  m_LocalRotation: {x: 0.000000089406946, y: -0.00000005960463, z: -0.7071065, w: -0.707107}
   m_LocalPosition: {x: -0.10026932, y: -9.932053, z: -0.12641281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1159725693504135806}
   m_Father: {fileID: 3671069545836002067}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -270}
 --- !u!114 &5634123799578493585
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2858,7 +2787,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: -0.6}
---- !u!114 &7851393034129907934
+--- !u!114 &4901024765070790373
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2870,7 +2799,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23f044b1fd533a42957033d982a4c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectedTube: {fileID: 7397823490510921502}
+  ConnectedTube: {fileID: 4968479484660055300}
+  WaypointsContainer: {fileID: 0}
+  TubeAnimator: {fileID: 2157243439308864711}
+  Tile: {fileID: 5634123799578493585}
+--- !u!114 &4581266376867977761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075429713400886780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abfaf44812b4487418093eeae562e59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogChecker:
+    CheckerLevel: 0
+    Subsystem: 
+    Gizmos: 0
+    LocalLog: 0
+    Context: {fileID: 0}
+    AddSubsystem: 0
+    AddContextPath: 0
+    AddContextCoordinate: 0
+    AddContextHash: 0
+    AddContextSiblingIndex: 0
+    AddComponentName: 0
+    LocalLogBuffer: 
+  MaxHitCount: -1
+  IsActive: 1
+  Handlers:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4901024765070790373}
+        m_TargetAssemblyTypeName: TubeTeleport, Core
+        m_MethodName: StartTeleporting
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2157243439308864711}
+        m_TargetAssemblyTypeName: TubeTeleportAnimator, Core
+        m_MethodName: AnimateSuckInside
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ScriptHandler: 
+  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.961
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &2110164903112918499
 GameObject:
   m_ObjectHideFlags: 0
@@ -2882,6 +2875,7 @@ GameObject:
   - component: {fileID: 2364194895504174061}
   - component: {fileID: 7294975171664052701}
   - component: {fileID: 8265434601205246786}
+  - component: {fileID: 4708760618456858110}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -2958,6 +2952,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &4708760618456858110
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2110164903112918499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 2191504376886342826}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &2158492476863434969
 GameObject:
   m_ObjectHideFlags: 0
@@ -3071,7 +3083,7 @@ Transform:
   m_GameObject: {fileID: 2225001166819545967}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -2.1002693, y: 0.06794739, z: -0.28}
+  m_LocalPosition: {x: -2.1002693, y: 0.06794739, z: -0.12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3135,6 +3147,7 @@ GameObject:
   - component: {fileID: 1159725693504135806}
   - component: {fileID: 6606687061846355160}
   - component: {fileID: 6246143739913256154}
+  - component: {fileID: 2157243439308864711}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -3211,6 +3224,19 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2157243439308864711
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2322356209621468151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d174902319150a948adf561869cf4329, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Cylinder: {fileID: 8864569765969317226}
 --- !u!1 &2331867764448434978
 GameObject:
   m_ObjectHideFlags: 0
@@ -3222,6 +3248,7 @@ GameObject:
   - component: {fileID: 8585602321841931651}
   - component: {fileID: 224299906338402265}
   - component: {fileID: 6227029928616696233}
+  - component: {fileID: 3870982034544073758}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -3298,6 +3325,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3870982034544073758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2331867764448434978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 66826432067443244}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &2333746666416651464
 GameObject:
   m_ObjectHideFlags: 0
@@ -3384,86 +3429,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &2380324401482583865
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1722245689779586928}
-  - component: {fileID: 2183277813583835885}
-  - component: {fileID: 4488162659427893654}
-  m_Layer: 0
-  m_Name: Tile.054
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1722245689779586928
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2380324401482583865}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.61237234, y: 0.6123725, z: -0.35355332, w: -0.35355344}
-  m_LocalPosition: {x: -6.1002693, y: 10.044231, z: 17.069794}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 9221659261149464485}
-  m_Father: {fileID: 3671069545836002067}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2183277813583835885
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2380324401482583865}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0899b7bdca1b06245b7b88356b7c0c69, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
---- !u!135 &4488162659427893654
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2380324401482583865}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Radius: 1.0000002
-  m_Center: {x: 0, y: 0.0000008940697, z: -0.6000001}
 --- !u!1 &2425914691807081891
 GameObject:
   m_ObjectHideFlags: 0
@@ -3475,6 +3440,7 @@ GameObject:
   - component: {fileID: 961086090672662095}
   - component: {fileID: 7847248639802922461}
   - component: {fileID: 667656744093310908}
+  - component: {fileID: 555599255039831193}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -3551,6 +3517,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &555599255039831193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2425914691807081891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 8416826809585061113}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &2431686454957850033
 GameObject:
   m_ObjectHideFlags: 0
@@ -3729,8 +3713,7 @@ GameObject:
   - component: {fileID: 558541888610987699}
   - component: {fileID: 2531610481830281176}
   - component: {fileID: 7601767315066401781}
-  - component: {fileID: 6926227154777272032}
-  - component: {fileID: 1509161736063495530}
+  - component: {fileID: 455534630145221647}
   m_Layer: 0
   m_Name: Tile.015
   m_TagString: Untagged
@@ -3833,7 +3816,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 8357593012641537557}
     AddQuaternion: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &6926227154777272032
+--- !u!114 &455534630145221647
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -3858,11 +3841,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 5631542508927054503}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 7601767315066401781}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -3877,57 +3872,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 7063967582270917942}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
+  HitCount: 0
+  OneHitMaxPerVisit: 1
   ActiveRadius: 0.9
---- !u!114 &1509161736063495530
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2568857003969160428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6926227154777272032}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &2628417141923531296
 GameObject:
   m_ObjectHideFlags: 0
@@ -4025,6 +3974,7 @@ GameObject:
   - component: {fileID: 5149384422809962640}
   - component: {fileID: 530369079003098507}
   - component: {fileID: 8942202626891105010}
+  - component: {fileID: 2192628557205770736}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -4101,6 +4051,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2192628557205770736
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2735628436661294138}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 3691285963189661377}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &2756226059571122397
 GameObject:
   m_ObjectHideFlags: 0
@@ -4199,8 +4167,7 @@ GameObject:
   - component: {fileID: 3367126867565483467}
   - component: {fileID: 6560652083434869230}
   - component: {fileID: 4669721273600646105}
-  - component: {fileID: 2192360092209520305}
-  - component: {fileID: 5939557599531206253}
+  - component: {fileID: 3427381563875596905}
   m_Layer: 0
   m_Name: Tile.012
   m_TagString: Untagged
@@ -4303,7 +4270,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 4941553553950066768}
     AddQuaternion: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &2192360092209520305
+--- !u!114 &3427381563875596905
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4328,11 +4295,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 4708760618456858110}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 4669721273600646105}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -4347,57 +4326,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 2191504376886342826}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &5939557599531206253
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2808957746700492879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2192360092209520305}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.856
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &2860630278360277596
 GameObject:
   m_ObjectHideFlags: 0
@@ -4576,8 +4509,7 @@ GameObject:
   - component: {fileID: 969902657030289394}
   - component: {fileID: 3884593678620727630}
   - component: {fileID: 1408680166273463923}
-  - component: {fileID: 7993041195168119744}
-  - component: {fileID: 5722986953173956735}
+  - component: {fileID: 3479538375545179525}
   m_Layer: 0
   m_Name: Tile.012 (1)
   m_TagString: Untagged
@@ -4676,7 +4608,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 3934817253793637226}
     AddQuaternion: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   Ease: 13
---- !u!114 &7993041195168119744
+--- !u!114 &3479538375545179525
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -4701,11 +4633,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 2192628557205770736}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 1408680166273463923}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -4720,57 +4664,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 3691285963189661377}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &5722986953173956735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3021310629823588941}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 7993041195168119744}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.907
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &3023031737288165617
 GameObject:
   m_ObjectHideFlags: 0
@@ -5201,8 +5099,7 @@ GameObject:
   - component: {fileID: 3112933712941681680}
   - component: {fileID: 2869784900887717486}
   - component: {fileID: 8085050064902725396}
-  - component: {fileID: 1402119615695825300}
-  - component: {fileID: 8360007666035833094}
+  - component: {fileID: 5797282944668057267}
   m_Layer: 0
   m_Name: Tile.019
   m_TagString: Untagged
@@ -5305,7 +5202,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 4413997765534308032}
     AddQuaternion: {x: 0, y: 0, z: -0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &1402119615695825300
+--- !u!114 &5797282944668057267
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5330,11 +5227,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 5482229273001667651}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 8085050064902725396}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -5349,143 +5258,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 3414491648879869068}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &8360007666035833094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3133355306614980272}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1402119615695825300}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
---- !u!1 &3140474007443643261
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9221659261149464485}
-  - component: {fileID: 6212029287543094129}
-  - component: {fileID: 6506747104863343751}
-  m_Layer: 0
-  m_Name: Visual
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9221659261149464485
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3140474007443643261}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0.00000004470349, y: -0, z: 0.00000005960465, w: 1}
-  m_LocalPosition: {x: -0.000001873113, y: -9.094947e-13, z: 0.000004385067}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1722245689779586928}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6212029287543094129
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3140474007443643261}
-  m_Mesh: {fileID: -6829319676923529090, guid: 4886f03c3fb1bb744ae5f0785180ab32, type: 3}
---- !u!23 &6506747104863343751
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3140474007443643261}
-  m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.835
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &3147073095839837765
 GameObject:
   m_ObjectHideFlags: 0
@@ -6001,6 +5778,7 @@ GameObject:
   - component: {fileID: 5479929565236745054}
   - component: {fileID: 5129174112887290573}
   - component: {fileID: 3861243170365592571}
+  - component: {fileID: 5482229273001667651}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -6077,6 +5855,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5482229273001667651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3338996554610879738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 3414491648879869068}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &3344587928993556670
 GameObject:
   m_ObjectHideFlags: 0
@@ -6668,8 +6464,7 @@ GameObject:
   - component: {fileID: 919290142980720638}
   - component: {fileID: 7084958535742823784}
   - component: {fileID: 489051242713775189}
-  - component: {fileID: 2391593599711553108}
-  - component: {fileID: 6975982392914672414}
+  - component: {fileID: 3780303940003616371}
   m_Layer: 0
   m_Name: Tile.004
   m_TagString: Untagged
@@ -6770,7 +6565,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 4020259157980219989}
     AddQuaternion: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &2391593599711553108
+--- !u!114 &3780303940003616371
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -6795,11 +6590,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
-  IsActive: 0
+  MaxHitCount: -1
+  IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3870982034544073758}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 489051242713775189}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -6814,57 +6621,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 66826432067443244}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &6975982392914672414
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3602229071218475460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2391593599711553108}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.868
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &3619685471427350864
 GameObject:
   m_ObjectHideFlags: 0
@@ -7122,9 +6883,8 @@ GameObject:
   - component: {fileID: 3862211637554162831}
   - component: {fileID: 3534863988019498564}
   - component: {fileID: 8140067052942141086}
-  - component: {fileID: 6945098267146332150}
   - component: {fileID: 6706500007876738608}
-  - component: {fileID: 494800032440046652}
+  - component: {fileID: 6329307692164712035}
   m_Layer: 0
   m_Name: Tile.001 (1)
   m_TagString: Untagged
@@ -7194,57 +6954,6 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: -0.6}
---- !u!114 &6945098267146332150
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3850415586016265529}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1f9fbfcf145d01448cf3f5f35614638, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 2
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: 1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6706500007876738608}
-        m_TargetAssemblyTypeName: TileWheelRotation, Core
-        m_MethodName: Rotate
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 1624764138334151003}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 0
-  UnpressEase: 0
-  ActiveRadius: 0.9
 --- !u!114 &6706500007876738608
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7276,7 +6985,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 8716456637254036723}
     AddQuaternion: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   Ease: 13
---- !u!114 &494800032440046652
+--- !u!114 &6329307692164712035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7285,7 +6994,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 3850415586016265529}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
+  m_Script: {fileID: 11500000, guid: c1f9fbfcf145d01448cf3f5f35614638, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LogChecker:
@@ -7306,13 +7015,25 @@ MonoBehaviour:
   Handlers:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6945098267146332150}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 1
+      - m_Target: {fileID: 3764888219463474112}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6706500007876738608}
+        m_TargetAssemblyTypeName: TileWheelRotation, Core
+        m_MethodName: Rotate
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -7320,6 +7041,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.901
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &3931239322476705681
 GameObject:
   m_ObjectHideFlags: 0
@@ -7419,7 +7145,7 @@ Transform:
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 8.290918, y: -16.95702, z: 10.890519}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 3671069545836002067}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8581,7 +8307,8 @@ GameObject:
   - component: {fileID: 4172902493417430064}
   - component: {fileID: 387053044919892521}
   - component: {fileID: 7147929908830490987}
-  - component: {fileID: 7397823490510921502}
+  - component: {fileID: 4968479484660055300}
+  - component: {fileID: 7378175090577775086}
   m_Layer: 0
   m_Name: Tile.032
   m_TagString: Untagged
@@ -8597,14 +8324,14 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4924229200564079544}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5, y: 0.5, z: 0.4999998, w: 0.50000024}
+  m_LocalRotation: {x: -0.5, y: -0.5, z: -0.5, w: 0.5}
   m_LocalPosition: {x: -6.1002693, y: -11.4128, z: 11.395185}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1842305737654310174}
   m_Father: {fileID: 3671069545836002067}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: -90}
 --- !u!114 &387053044919892521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8651,7 +8378,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.0000001
   m_Center: {x: 0, y: -0.00000011920929, z: -0.6000001}
---- !u!114 &7397823490510921502
+--- !u!114 &4968479484660055300
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8663,7 +8390,71 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f23f044b1fd533a42957033d982a4c15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectedTube: {fileID: 7851393034129907934}
+  ConnectedTube: {fileID: 4901024765070790373}
+  WaypointsContainer: {fileID: 0}
+  TubeAnimator: {fileID: 8744068764598014874}
+  Tile: {fileID: 387053044919892521}
+--- !u!114 &7378175090577775086
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4924229200564079544}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abfaf44812b4487418093eeae562e59e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogChecker:
+    CheckerLevel: 0
+    Subsystem: 
+    Gizmos: 0
+    LocalLog: 0
+    Context: {fileID: 0}
+    AddSubsystem: 0
+    AddContextPath: 0
+    AddContextCoordinate: 0
+    AddContextHash: 0
+    AddContextSiblingIndex: 0
+    AddComponentName: 0
+    LocalLogBuffer: 
+  MaxHitCount: -1
+  IsActive: 1
+  Handlers:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 4968479484660055300}
+        m_TargetAssemblyTypeName: TubeTeleport, Core
+        m_MethodName: StartTeleporting
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8744068764598014874}
+        m_TargetAssemblyTypeName: TubeTeleportAnimator, Core
+        m_MethodName: AnimateSuckInside
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  ScriptHandler: 
+  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.9
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &4931885411263309012
 GameObject:
   m_ObjectHideFlags: 0
@@ -9432,8 +9223,7 @@ GameObject:
   - component: {fileID: 4032542268506158540}
   - component: {fileID: 8271836466299414287}
   - component: {fileID: 600099308977762689}
-  - component: {fileID: 6093496509073472679}
-  - component: {fileID: 6410140375736568211}
+  - component: {fileID: 562746745358150123}
   m_Layer: 0
   m_Name: Tile.027
   m_TagString: Untagged
@@ -9532,7 +9322,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 5540588507454610692}
     AddQuaternion: {x: 0, y: 0, z: 1, w: -0.00000004371139}
   Ease: 13
---- !u!114 &6093496509073472679
+--- !u!114 &562746745358150123
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -9557,11 +9347,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 555599255039831193}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 600099308977762689}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -9576,57 +9378,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 8416826809585061113}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &6410140375736568211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5426796664476351370}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6093496509073472679}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.828
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &5540011529648830288
 GameObject:
   m_ObjectHideFlags: 0
@@ -12825,7 +12581,6 @@ Transform:
   - {fileID: 7465970009486000823}
   - {fileID: 7489138292983008252}
   - {fileID: 8638173208408893124}
-  - {fileID: 1722245689779586928}
   - {fileID: 849631111200246124}
   - {fileID: 6589122911595158885}
   - {fileID: 7657340709404590274}
@@ -13013,6 +12768,7 @@ GameObject:
   - component: {fileID: 5330218978499691253}
   - component: {fileID: 7860872934632760873}
   - component: {fileID: 134920587552325099}
+  - component: {fileID: 3800112617763329839}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -13089,6 +12845,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3800112617763329839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8035227923986404916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 4041973330008331672}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &8088970936843992077
 GameObject:
   m_ObjectHideFlags: 0
@@ -13100,6 +12874,7 @@ GameObject:
   - component: {fileID: 4513347034185559427}
   - component: {fileID: 9146575292635470080}
   - component: {fileID: 3992010826619864744}
+  - component: {fileID: 8955521852762445509}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -13176,6 +12951,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &8955521852762445509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8088970936843992077}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 1528338963898188216}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &8166187006128165847
 GameObject:
   m_ObjectHideFlags: 0
@@ -13267,6 +13060,7 @@ GameObject:
   - component: {fileID: 329423269017714434}
   - component: {fileID: 1174990155434844261}
   - component: {fileID: 4289628729402121863}
+  - component: {fileID: 5631542508927054503}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -13343,6 +13137,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &5631542508927054503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8238236630342783134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 7063967582270917942}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &8267870897159153722
 GameObject:
   m_ObjectHideFlags: 0
@@ -13434,6 +13246,7 @@ GameObject:
   - component: {fileID: 3418643856796756729}
   - component: {fileID: 8779325883694444068}
   - component: {fileID: 8942347844555100772}
+  - component: {fileID: 2191142851909031454}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -13510,6 +13323,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2191142851909031454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431486957320888169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 3535307518888716226}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &8597772633974385974
 GameObject:
   m_ObjectHideFlags: 0
@@ -14118,8 +13949,7 @@ GameObject:
   - component: {fileID: 4251571227900165110}
   - component: {fileID: 4368768901519093303}
   - component: {fileID: 988538499499175011}
-  - component: {fileID: 69844624468934234}
-  - component: {fileID: 7782608034066090002}
+  - component: {fileID: 3037856663368345330}
   m_Layer: 0
   m_Name: Tile.005
   m_TagString: Untagged
@@ -14222,7 +14052,7 @@ MonoBehaviour:
   - EnterTile: {fileID: 3646610609392447289}
     AddQuaternion: {x: 0, y: 0, z: 0.70710677, w: 0.70710677}
   Ease: 13
---- !u!114 &69844624468934234
+--- !u!114 &3037856663368345330
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14247,11 +14077,23 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MaxHitCount: 1
+  MaxHitCount: -1
   IsActive: 1
   Handlers:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 3800112617763329839}
+        m_TargetAssemblyTypeName: TileButtonAnimator, Core
+        m_MethodName: AnimateButtonClick
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: 
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 988538499499175011}
         m_TargetAssemblyTypeName: TileWheelRotation, Core
         m_MethodName: Rotate
@@ -14266,57 +14108,11 @@ MonoBehaviour:
         m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
-  ButtonTransform: {fileID: 4041973330008331672}
-  PressDepth: 0.2
-  PressDuration: 0.2
-  UnpressDuration: 0.8
-  PressEase: 26
-  UnpressEase: 24
-  ActiveRadius: 0.9
---- !u!114 &7782608034066090002
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9096828280143870039}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9269a2eac482bc849a22b5a69e46b783, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  LogChecker:
-    CheckerLevel: 0
-    Subsystem: 
-    Gizmos: 0
-    LocalLog: 0
-    Context: {fileID: 0}
-    AddSubsystem: 0
-    AddContextPath: 0
-    AddContextCoordinate: 0
-    AddContextHash: 0
-    AddContextSiblingIndex: 0
-    AddComponentName: 0
-    LocalLogBuffer: 
-  MaxHitCount: -1
-  IsActive: 1
-  Handlers:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 69844624468934234}
-        m_TargetAssemblyTypeName: Core.TriggerBase, Core
-        m_MethodName: ResetTriggerCount
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  ScriptHandler: 
-  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 0.868
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
 --- !u!1 &9109788689802227851
 GameObject:
   m_ObjectHideFlags: 0
@@ -14328,6 +14124,7 @@ GameObject:
   - component: {fileID: 3021205426166820226}
   - component: {fileID: 6994726366368197139}
   - component: {fileID: 5913989026357578130}
+  - component: {fileID: 6248691508934152307}
   m_Layer: 0
   m_Name: Visual
   m_TagString: Untagged
@@ -14404,6 +14201,24 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6248691508934152307
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9109788689802227851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94ae58f1488d6eb4896bc809916d489d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ButtonTransform: {fileID: 5639488634124250059}
+  PressDepth: 0.2
+  PressDuration: 0.2
+  UnpressDuration: 0.8
+  PressEase: 26
+  UnpressEase: 24
 --- !u!1 &9113543285610093195
 GameObject:
   m_ObjectHideFlags: 0

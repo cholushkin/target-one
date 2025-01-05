@@ -1,13 +1,6 @@
 namespace Core
 {
-    public class TriggerTileExit : TriggerBase
+    public class TriggerTileExit : TriggerTileBase
     {
-        public void HitTriggerExit(TileWalker tileWalker)
-        {
-            if (WillHit())
-            {
-                base.HitTrigger();
-            }
-        }
     }
 }

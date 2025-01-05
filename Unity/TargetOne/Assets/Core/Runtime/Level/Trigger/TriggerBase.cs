@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using GameLib.Alg;
 using GameLib.Log;
 using MoonSharp.Interpreter;
 using NaughtyAttributes;
@@ -13,13 +14,12 @@ namespace Core
     public class TriggerBase : MonoBehaviour
     {
         #region Inspector
-
+        [Header("Trigger Base")]
         public LogChecker LogChecker;
         [Tooltip("-1 for infinity")] public int MaxHitCount; // Maximum number of allowed trigger hits (-1 for no limit)
         public bool IsActive; // Determines if the trigger is active
         public UnityEvent Handlers; // Unity events triggered on activation
         [ResizableTextArea] public string ScriptHandler; // Lua script to execute on activation (after Unity events)
-
         #endregion
 
         [Tooltip(
@@ -30,7 +30,7 @@ namespace Core
 
         public bool RunLuaCoroutine; // Flag to enable running Lua scripts as coroutines
 
-        public int HitCount { get; set; } // Tracks the current hit count
+        public int HitCount; // Tracks the current hit count
 
         private DynValue _luaCoroutine; // Reference to the active Lua coroutine
         private static ulong _functionUID = 0; // Unique ID for Lua functions
@@ -46,24 +46,12 @@ namespace Core
         void Awake()
         {
             // Validate that MaxHitCount is not invalid
-            Assert.IsFalse(MaxHitCount == 0);
-            Assert.IsFalse(MaxHitCount < -1);
+            Assert.IsFalse(MaxHitCount == 0,$"{transform.GetDebugName()}");
+            Assert.IsFalse(MaxHitCount < -1, $"{transform.GetDebugName()}");
         }
 
-        [Button("HitTrigger")]
-        public virtual void HitTrigger()
+        protected void Activate()
         {
-            // Do nothing if the trigger is inactive
-            if (!IsActive)
-                return;
-
-            // Check if the max hit count is reached (if a limit exists)
-            if (MaxHitCount != -1 && HitCount >= MaxHitCount)
-            {
-                LogChecker.PrintWarning(LogChecker.Level.Normal, $"Max hit count of {MaxHitCount} reached!");
-                return;
-            }
-
             // Increment the hit count
             ++HitCount;
 
@@ -114,7 +102,7 @@ namespace Core
             HitCount = 0;
         }
 
-        public bool WillHit()
+        public bool WillActivate()
         {
             if (!IsActive)
                 return false;

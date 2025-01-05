@@ -5,6 +5,7 @@ using DG.Tweening;
 using GameLib.Log;
 using NaughtyAttributes;
 using UnityEngine;
+using UnityEngine.Assertions;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -22,8 +23,6 @@ public class TileWheelRotation : MonoBehaviour
     public LogChecker LogChecker;
     public DirectionItem[] Rotations;
     public Ease Ease;
-    private Tile _lastFromTile;
-
 
     public void Reset()
     {
@@ -65,7 +64,11 @@ public class TileWheelRotation : MonoBehaviour
     [Button]
     public void Rotate()
     {
-        if (!_lastFromTile)
+        var triggerTileButton = GetComponent<TriggerTileButton>();
+        Assert.IsNotNull(triggerTileButton);
+        Assert.IsNotNull(triggerTileButton.EnteredFromTile);
+        
+        if (!triggerTileButton.IsWalkerEntered)
         {
             LogChecker.PrintWarning(LogChecker.Level.Important, $"There is no registered Walker entered tile {name}");
             return;
@@ -75,15 +78,15 @@ public class TileWheelRotation : MonoBehaviour
         var walker = GetComponentInChildren<TileWalker>();
         if (!walker)
         {
-            LogChecker.PrintWarning(LogChecker.Level.Important, $"can't find Walker. Tile: {name}");
+            LogChecker.PrintWarning(LogChecker.Level.Important, $"Can't find Walker. Tile: {name}");
             return;
         }
 
-        var item = Rotations.FirstOrDefault(i => i.EnterTile == _lastFromTile);
+        var item = Rotations.FirstOrDefault(i => i.EnterTile == triggerTileButton.EnteredFromTile);
         if (item == null)
         {
             LogChecker.PrintWarning(LogChecker.Level.Important,
-                $"can't find {_lastFromTile.name} in defined rotations");
+                $"can't find {triggerTileButton.EnteredFromTile.name} in defined rotations");
             return;
         }
 
@@ -94,12 +97,6 @@ public class TileWheelRotation : MonoBehaviour
         transform.DOLocalRotateQuaternion(finalTargetRotation, duration)
             .SetEase(Ease)
             .OnComplete(() => OnCompleteRotation(walker));
-    }
-
-    public void RegisterEntering(Tile fromTile)
-    {
-        LogChecker.Print(LogChecker.Level.Normal, $"Entering from: {fromTile.name}");
-        _lastFromTile = fromTile;
     }
 
     private void OnCompleteRotation(TileWalker walker)

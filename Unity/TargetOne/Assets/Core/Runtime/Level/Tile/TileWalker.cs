@@ -1,4 +1,3 @@
-using System;
 using GameLib;
 using GameLib.Log;
 using NaughtyAttributes;
@@ -31,6 +30,12 @@ namespace Core
             public Tile CurrentTile;
         }
 
+        public class EventWalkerDetachFromTile
+        {
+            public TileWalker TileWalker;
+            public Tile DetachedTile;
+        }
+
         public class EventWalkerReachTileCenter
         {
             public TileWalker TileWalker;
@@ -61,6 +66,7 @@ namespace Core
         public bool MoveOnStart;
         public GameObject SubDestinationPointer;
         public SmoothTileFollower SmoothTileFollower;
+        public PlayerController PlayerController;
 
         [Tooltip("Movement speed (units per second).")]
         public float TargetSpeed = 2.0f;
@@ -89,10 +95,9 @@ namespace Core
         private float _speedBeforeStartFalling;
 
         // Reuse frequent event
-        private static readonly EventWalkerAttachToTile _eventWalkerAttachToTile = new EventWalkerAttachToTile();
-
-        private static readonly EventWalkerReachTileCenter _eventWalkerReachTileCenter =
-            new EventWalkerReachTileCenter();
+        private static readonly EventWalkerAttachToTile _eventWalkerAttachToTile = new();
+        private static readonly EventWalkerDetachFromTile _eventWalkerDetachFromTile = new();
+        private static readonly EventWalkerReachTileCenter _eventWalkerReachTileCenter = new();
 
 
         #region Unity callbacks ----------------------------------------------------------------------------------------
@@ -113,7 +118,7 @@ namespace Core
         public void Start()
         {
             if (MoveOnStart)
-                _stateMachine.GoTo(State.Walking);
+                GoToState(State.Walking);
         }
 
         private void Update()
@@ -232,6 +237,7 @@ namespace Core
                     }
                     else // Final fall
                     {
+                        PostWalkerDetachFromTile(this, CurrentTile);
                         _stateMachine.GoTo(State.Awake);
                     }
                 }
@@ -247,20 +253,7 @@ namespace Core
 
         public void Init(Tile startTile)
         {
-            // Set current tile
-            Assert.IsNotNull(startTile);
-            CurrentTile = startTile;
-
-            // Set position and parents
-            transform.position = CurrentTile.transform.position;
-            transform.SetParent(CurrentTile.transform);
-            if (SmoothTileFollower)
-                SmoothTileFollower.transform.SetParent(CurrentTile.transform);
-
-            // Set rotation to tile forward
-            transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
-            if (SmoothTileFollower)
-                SmoothTileFollower.Init(transform.position, transform.rotation);
+            PutOnTile(startTile);
         }
 
         private Tile GetNextTile()
@@ -277,6 +270,44 @@ namespace Core
             return null;
         }
 
+        public void DetachFromTile()
+        {
+            transform.SetParent(null);
+            SmoothTileFollower?.transform.SetParent(null);
+            PostWalkerDetachFromTile(this, CurrentTile);
+            CurrentTile = null;
+        }
+
+        public void SetActive(bool flag)
+        {
+            enabled = flag;
+        }
+
+        public void PutOnTile(Tile tile)
+        {
+            // Set current tile
+            Assert.IsNotNull(tile);
+            CurrentTile = tile;
+
+            // Set position and parents
+            transform.position = CurrentTile.transform.position;
+            transform.SetParent(CurrentTile.transform);
+            if (SmoothTileFollower)
+                SmoothTileFollower.transform.SetParent(CurrentTile.transform);
+            
+            // Set rotation to tile forward
+            transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
+            if (SmoothTileFollower)
+                SmoothTileFollower.Init(transform.position, transform.rotation);
+            
+            PostWalkerAttachToTileEvent(this, null, CurrentTile);
+        }
+        
+        public void GoToState(State newState)
+        {
+            _stateMachine.GoTo(newState);
+        }
+        
         private bool StartMoveToNextTile()
         {
             var nextTile = GetNextTile();
@@ -304,6 +335,7 @@ namespace Core
                 SmoothTileFollower.transform.SetParent(CurrentTile.transform);
             }
 
+            PostWalkerDetachFromTile(this, prevCurrentTile);
             PostWalkerAttachToTileEvent(this, prevCurrentTile, CurrentTile);
             return true;
         }
@@ -446,6 +478,13 @@ namespace Core
             _eventWalkerAttachToTile.PrevTile = prevTile;
             _eventWalkerAttachToTile.CurrentTile = currentTile;
             GlobalEventAggregator.EventAggregator.Publish(_eventWalkerAttachToTile);
+        }
+        
+        private static void PostWalkerDetachFromTile(TileWalker tileWalker, Tile detachedTile)
+        {
+            _eventWalkerDetachFromTile.TileWalker = tileWalker;
+            _eventWalkerDetachFromTile.DetachedTile = detachedTile;
+            GlobalEventAggregator.EventAggregator.Publish(_eventWalkerDetachFromTile);
         }
 
         private static void PostWalkerReachTileCenterEvent(TileWalker tileWalker, Tile tile)

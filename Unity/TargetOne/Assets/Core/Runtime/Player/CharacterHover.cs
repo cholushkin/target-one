@@ -16,7 +16,7 @@ public class CharacterHover : MonoBehaviour
     [ShowNonSerializedField]
     private float _baseHeight; // The current base height
 
-    public readonly (float amp, float height) WakeUpValues = (0.02f, 0.1f);
+    public readonly (float amp, float height) WakeUpValues = (0.02f, 0.1f); // Dead values
     public (float amp, float height) NormalValues { get; private set; }
 
     void Start()
@@ -81,8 +81,24 @@ public class CharacterHover : MonoBehaviour
         // Update the height as well
         SetHeight(height, duration);
     }
-
-   
+    
+    public void SetActive(bool flag)
+    {
+        // Enable hovering again from zero to normal state
+        if (flag)
+        {
+            Set(NormalValues.amp, NormalValues.height, 2f);
+            StartFluctuation();
+        }
+        // Disable hovering
+        else
+        {
+            // Stop animating
+            _heightTween?.Kill();
+            _fluctuationTween?.Kill();
+            _amplitudeTween?.Kill();
+        }
+    }
 
     [Button]
     void DbgSetLow()

@@ -1,13 +1,6 @@
 namespace Core
 {
-    public class TriggerTileReachCenter : TriggerBase
+    public class TriggerTileReachCenter : TriggerTileBase
     {
-        public void HitTriggerReachCenter(TileWalker tileWalker)
-        {
-            if (WillHit())
-            {
-                base.HitTrigger();
-            }
-        }
     }
 }
