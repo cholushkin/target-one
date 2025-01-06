@@ -64,6 +64,7 @@ namespace Core
 
         public LogChecker LogChecker;
         public bool MoveOnStart;
+        public bool InitOnAwake;
         public GameObject SubDestinationPointer;
         public SmoothTileFollower SmoothTileFollower;
         public PlayerController PlayerController;
@@ -83,7 +84,7 @@ namespace Core
 
         #endregion -----------------------------------------------------------------------------------------------------
 
-        public float CurrentSpeed => TargetSpeed * GameSession.Instance.GameSpeed;
+        public float CurrentSpeed => TargetSpeed * GameSessionController.Instance.GameSpeed;
         public bool StickToTile { get; set; }
         public TileState CurrentTileState { get; set; }
 
@@ -104,9 +105,12 @@ namespace Core
 
         public void Awake()
         {
-            Assert.IsNotNull(CurrentTile);
-            Init(CurrentTile);
             _stateMachine = new StateMachine<State>(this, State.Standing);
+            if (InitOnAwake)
+            {
+                Assert.IsNotNull(CurrentTile);
+                Init(CurrentTile);
+            }
         }
 
         public void Reset()
@@ -181,7 +185,7 @@ namespace Core
         {
             // Update velocity
             _velocity = Mathf.SmoothDamp(_velocity, TargetSpeed, ref _velocityChangeRate, VelocitySmoothTime);
-            var finalVelocity = _velocity * GameSession.Instance.GameSpeed;
+            var finalVelocity = _velocity * GameSessionController.Instance.GameSpeed;
 
             // Calculate the direction to the destination
             Vector3 direction = (SubDestinationPointer.transform.localPosition - transform.localPosition).normalized;
@@ -385,7 +389,7 @@ namespace Core
             SetSubdestinationPointer(CurrentTile, fallingPoint);
             GlobalEventAggregator.EventAggregator.Publish(new EventStartFalling
             {
-                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSession.Instance.GameSpeed )
+                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance.GameSpeed )
             }); // start lowering hovering height on visual
         }
 
@@ -396,7 +400,7 @@ namespace Core
             GlobalEventAggregator.EventAggregator.Publish(new EventFallRecover
             {
                 TileWalker = this,
-                Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSession.Instance.GameSpeed)
+                Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance.GameSpeed)
             });
             StartQuitingTile();
             TargetSpeed = _speedBeforeStartFalling;

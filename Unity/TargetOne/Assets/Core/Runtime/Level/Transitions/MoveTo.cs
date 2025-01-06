@@ -21,7 +21,7 @@ public class MoveTo : MonoBehaviour
         // Use DOTween to smoothly move to the target position in the local space
         transform.DOLocalMove(
                 targetLocalPosition,                // Target position in local space
-                Speed * GameSession.Instance.GameSpeed // Adjust speed based on game speed
+                Speed * GameSessionController.Instance.GameSpeed // Adjust speed based on game speed
             )
             .SetEase(Ease.Linear)                   // Linear easing for consistent speed
             .SetSpeedBased(true);                   // Treat the second parameter as speed

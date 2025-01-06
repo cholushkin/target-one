@@ -41,7 +41,7 @@ public class ObjectRotationFacing : MonoBehaviour
 
         // Animate the local rotation using DOTween
         Quaternion targetLocalRotation = transform.localRotation * localRotation;
-        transform.DOLocalRotateQuaternion(targetLocalRotation, RotationSpeed * GameSession.Instance.GameSpeed)
+        transform.DOLocalRotateQuaternion(targetLocalRotation, RotationSpeed * GameSessionController.Instance.GameSpeed)
             //.SetSpeedBased(true)
             .SetEase(Ease);
     }

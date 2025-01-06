@@ -9,7 +9,7 @@ public class HoverY : MonoBehaviour
     void Start()
     {
         _tweener = transform
-            .DOLocalMoveY(EndValue, Speed * GameSession.Instance.GameSpeed)
+            .DOLocalMoveY(EndValue, Speed * GameSessionController.Instance.GameSpeed)
             .SetEase(Ease.InSine)
             .SetLoops(-1, LoopType.Yoyo)
             .SetSpeedBased(true);

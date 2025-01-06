@@ -36,7 +36,7 @@ public static class LuaWrap
     [ConsoleVariable("gamespeed", "speed", "Game speed")]
     public static float GameSpeed
     {
-        get => GameSession.Instance == null ? 0f : GameSession.Instance.GameSpeed;
-        set => GameSession.Instance.GameSpeed = value;
+        get => GameSessionController.Instance == null ? 0f : GameSessionController.Instance.GameSpeed;
+        set => GameSessionController.Instance.GameSpeed = value;
     }
 }

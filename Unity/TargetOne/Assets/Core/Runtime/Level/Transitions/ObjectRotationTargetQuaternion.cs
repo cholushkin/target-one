@@ -33,7 +33,7 @@ public class ObjectRotationTargetQuaternion : MonoBehaviour
             finalTargetRotation = TargetRotation;
         }
         
-        var speed = RotationSpeed * GameSession.Instance.GameSpeed;
+        var speed = RotationSpeed * GameSessionController.Instance.GameSpeed;
         var distance =  Quaternion.Angle(transform.localRotation, finalTargetRotation);
         float duration = distance / RotationSpeed;
 

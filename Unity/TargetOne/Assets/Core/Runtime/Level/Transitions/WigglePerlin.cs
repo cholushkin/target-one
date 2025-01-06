@@ -14,7 +14,7 @@ public class WigglePerlin : MonoBehaviour
 
     void Update()
     {
-        var gameSpeed = GameSession.Instance.GameSpeed;
+        var gameSpeed = GameSessionController.Instance.GameSpeed;
         float seededTime = Time.time + Seed;
         float timex = seededTime * Speed.x * gameSpeed;
         float timey = seededTime * Speed.y * gameSpeed;

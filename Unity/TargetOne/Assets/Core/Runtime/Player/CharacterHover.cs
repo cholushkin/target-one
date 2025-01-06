@@ -48,7 +48,7 @@ public class CharacterHover : MonoBehaviour
                 Visual.localPosition = new Vector3(
                     Visual.localPosition.x,
                     _baseHeight +
-                    Mathf.Sin(Time.time * Mathf.PI * 2f * FluctuationSpeed * GameSession.Instance.GameSpeed) *
+                    Mathf.Sin(Time.time * Mathf.PI * 2f * FluctuationSpeed * GameSessionController.Instance.GameSpeed) *
                     FluctuationAmplitude,
                     Visual.localPosition.z
                 );
