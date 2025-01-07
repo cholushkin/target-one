@@ -20,6 +20,7 @@ public class TileManager : MonoBehaviour
         {
             triggerTileBase.RegisterWalkerEnter(message.TileWalker, message.PrevTile);
             (triggerTileBase as TriggerTileEnter)?.Trigger(message.TileWalker);
+            (triggerTileBase as TriggerLevChunkEnter)?.Trigger(message.TileWalker);
         }
     }
 
@@ -39,6 +40,7 @@ public class TileManager : MonoBehaviour
         {
             triggerTileBase.RegisterWalkerExit(message.TileWalker);
             (triggerTileBase as TriggerTileExit)?.Trigger(message.TileWalker);
+            (triggerTileBase as TriggerTileLevChunkExit)?.Trigger(message.TileWalker);
         }
     }
 }

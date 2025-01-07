@@ -1504,7 +1504,7 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  MoveOnStart: 1
+  MoveOnStart: 0
   InitOnAwake: 0
   SubDestinationPointer: {fileID: 1918216854}
   SmoothTileFollower: {fileID: 1542019852}
@@ -1576,12 +1576,18 @@ MonoBehaviour:
   LevelGeneratorPointer: {fileID: 1434337358}
   Walker: {fileID: 772960401}
   GeneratorPointerRadius: 100
-  CurrentSegment:
+  CurrentSegmentConfiguration:
     Seed: 0
     SegmentID: 0
+    ColorScheme: 
+    VisualSetting: 
+    ChunksNumber:
+      From: 0
+      To: 0
     ChunksPool: []
   LevelParent: {fileID: 791482970}
   PrefabTest: {fileID: 7994336148573341879, guid: 02be3d49115d15148ab1af44c63cbfdb, type: 3}
+  _lastSegmentID: 0
 --- !u!4 &791482970
 Transform:
   m_ObjectHideFlags: 0
@@ -2401,6 +2407,7 @@ MonoBehaviour:
   Walker: {fileID: 772960401}
   LevelGenerator: {fileID: 791482969}
   GameSpeed: 2
+  LastCheckPoint: 0
 --- !u!4 &1782587175
 Transform:
   m_ObjectHideFlags: 0

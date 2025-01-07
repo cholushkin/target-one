@@ -13332,6 +13332,9 @@ GameObject:
   - component: {fileID: 4006128604558099198}
   - component: {fileID: 7108451107479950572}
   - component: {fileID: 3816985584649643843}
+  - component: {fileID: 9082015215582512807}
+  - component: {fileID: 6386942895388083148}
+  - component: {fileID: 1926847518450049518}
   m_Layer: 0
   m_Name: ChunkAUsr
   m_TagString: Untagged
@@ -13509,6 +13512,116 @@ MonoBehaviour:
   IndependentUpdate: 0
   Rigidbody: {fileID: 0}
   Ease: 4
+--- !u!114 &9082015215582512807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994336148573341879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0296d398bfcbf154b887769b4581680f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogChecker:
+    CheckerLevel: 0
+    Subsystem: 
+    Gizmos: 0
+    LocalLog: 0
+    Context: {fileID: 0}
+    AddSubsystem: 0
+    AddContextPath: 0
+    AddContextCoordinate: 0
+    AddContextHash: 0
+    AddContextSiblingIndex: 0
+    AddComponentName: 0
+    LocalLogBuffer: 
+  MaxHitCount: -1
+  IsActive: 1
+  Handlers:
+    m_PersistentCalls:
+      m_Calls: []
+  ScriptHandler: 
+  RunLuaCoroutine: 0
+  HitCount: 0
+  LevChunk: {fileID: 7994336148573341879}
+--- !u!114 &6386942895388083148
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994336148573341879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f2b9a6168850d147b6f78372d6d197e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogChecker:
+    CheckerLevel: 0
+    Subsystem: 
+    Gizmos: 0
+    LocalLog: 0
+    Context: {fileID: 0}
+    AddSubsystem: 0
+    AddContextPath: 0
+    AddContextCoordinate: 0
+    AddContextHash: 0
+    AddContextSiblingIndex: 0
+    AddComponentName: 0
+    LocalLogBuffer: 
+  MaxHitCount: -1
+  IsActive: 1
+  Handlers:
+    m_PersistentCalls:
+      m_Calls: []
+  ScriptHandler: 
+  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 0
+  ActiveRadius: 0
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
+  LevChunkEnter: {fileID: 7994336148573341879}
+--- !u!114 &1926847518450049518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7994336148573341879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2818491b94a85f24ca42cb78427f4867, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  LogChecker:
+    CheckerLevel: 0
+    Subsystem: 
+    Gizmos: 0
+    LocalLog: 0
+    Context: {fileID: 0}
+    AddSubsystem: 0
+    AddContextPath: 0
+    AddContextCoordinate: 0
+    AddContextHash: 0
+    AddContextSiblingIndex: 0
+    AddComponentName: 0
+    LocalLogBuffer: 
+  MaxHitCount: -1
+  IsActive: 1
+  Handlers:
+    m_PersistentCalls:
+      m_Calls: []
+  ScriptHandler: 
+  RunLuaCoroutine: 0
+  HitCount: 0
+  OneHitMaxPerVisit: 1
+  ActiveRadius: 1
+  EnteredFromTile: {fileID: 0}
+  IsWalkerEntered: 0
+  LevChunkExit: {fileID: 7994336148573341879}
 --- !u!1 &8011194367233507921
 GameObject:
   m_ObjectHideFlags: 0
@@ -14449,7 +14562,7 @@ GameObject:
   - component: {fileID: 7465970009486000823}
   - component: {fileID: 7644013391191387261}
   - component: {fileID: 8967698724584896761}
-  - component: {fileID: 4512884887532617026}
+  - component: {fileID: 5422548521949280025}
   m_Layer: 0
   m_Name: Tile.051
   m_TagString: Untagged
@@ -14519,7 +14632,7 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1
   m_Center: {x: 0, y: 0, z: -0.6}
---- !u!114 &4512884887532617026
+--- !u!114 &5422548521949280025
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -14528,7 +14641,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8681722970898993298}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fd649ccc134df114c92630525e7207c2, type: 3}
+  m_Script: {fileID: 11500000, guid: abfc5724500a2714eb8f0233a5eadc6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8683680867503590552

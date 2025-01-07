@@ -1,12 +1,5 @@
-using UnityEngine;
+using Gamelib;
 
-public class LevChunkEntry : MonoBehaviour
+public class LevChunkEntry : TrackableMonoBehaviour<LevChunkEntry>
 {
-    public enum EntryType
-    {
-        Enter,
-        Exit
-    }
-
-    public EntryType EntryTypey;
 }

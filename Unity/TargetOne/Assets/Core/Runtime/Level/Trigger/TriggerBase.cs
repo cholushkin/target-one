@@ -112,6 +112,14 @@ namespace Core
                 return false;
             return true;
         }
+        
+        public bool Trigger()
+        {
+            if (!WillActivate())
+                return false;
+            Activate();
+            return true;
+        }
 
 
         private async UniTask ScriptCoroutineProcess()

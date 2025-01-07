@@ -1,0 +1,22 @@
+{
+  "Seed": 12345,
+  "SegmentID": 1,
+  "ColorScheme": "Dark",
+  "VisualSetting": "Fantasy",
+  "ChunksNumber": {
+    "From": 1,
+    "To": 5
+  },
+  "ChunksPool": [
+    {
+      "ChunkName": "ChunkA",
+      "Probability": 0.5,
+      "Seed": -1
+    },
+    {
+      "ChunkName": "ChunkB, ChunkC,ChunkD",
+      "Probability": 0.3,
+      "Seed": 54321
+    }
+  ]
+}

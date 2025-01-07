@@ -31,6 +31,12 @@ public static class LuaWrap
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+    [ConsoleMethod("level.setsegmentconfig", "setsegcfg", "Set configuration for level generator")]
+    public static void SetLevelGeneratorSegmentConfig(LevelGenerator.SegmentConfiguration segConfig)
+    {
+        Debug.Log($"{segConfig}");
+    }
+
     #endregion
 
     [ConsoleVariable("gamespeed", "speed", "Game speed")]
@@ -39,4 +45,6 @@ public static class LuaWrap
         get => GameSessionController.Instance == null ? 0f : GameSessionController.Instance.GameSpeed;
         set => GameSessionController.Instance.GameSpeed = value;
     }
+    
+    
 }
