@@ -22,6 +22,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
             public float Probability; // Probability to spawn for current segment
             public long Seed; // Some specific chunk seed (or -1 to control from outer seed(SegmentConfiguration.Seed))
         }
+
         public long Seed; // Some specific Segment seed (or -1 to control from outer seed(LevelGenerator.Seed) 
         public int SegmentID; // More like sequential number 
         public string ColorScheme;
@@ -39,10 +40,10 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     [Tooltip("Level will be generated within radius")]
     public float GeneratorPointerRadius;
-    
+
     public Transform LevelParent;
     public GameObject PrefabTest;
-    
+
     public Tile SpawningTile { get; private set; }
 
     // Current segment variables
@@ -50,10 +51,11 @@ public class LevelGenerator : Singleton<LevelGenerator>
     private int _lastSegmentID;
     private long _segmentStartingSeed;
     private int _chunksNumberToGenerateLeft;
-    
+
     public Vector3 GetGeneratorPointerPosition => transform.position;
     private HashSet<GameObject> _createdChunks;
     private GameObject _lastCreatedChunk;
+    private Vector3 _lastChunkExit;
     private bool _sessionFirstPackOfChunks;
     private readonly IPseudoRandomNumberGenerator _rnd = RandomHelper.CreateRandomNumberGenerator();
     private CancellationTokenSource _cancellationTokenSource;
@@ -86,7 +88,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
     private async UniTaskVoid StartLevelGenerationAsync(CancellationToken cancellationToken)
     {
         _createdChunks = new HashSet<GameObject>();
-        
+
         // Async loop for continuous chunk generation and cleanup
         while (!cancellationToken.IsCancellationRequested)
         {
@@ -95,10 +97,10 @@ public class LevelGenerator : Singleton<LevelGenerator>
                 _sessionFirstPackOfChunks = false;
                 GlobalEventAggregator.EventAggregator.Publish(new EventLevelLoaded());
             }
-            
+
             UpdateLevelGeneratorPointer();
             await GenerateLevelChunks();
-            await CleanupChunks();
+            //await CleanupChunks();
 
             // Yield control back to the main thread to avoid blocking
             await UniTask.Yield(PlayerLoopTiming.Update, cancellationToken);
@@ -115,7 +117,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
                 Walker.transform.position.y, Walker.transform.position.z);
     }
 
-    
+
     private async UniTask CleanupChunks()
     {
         Vector3 generatorPosition = LevelGeneratorPointer.position;
@@ -132,7 +134,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
             }
         }
 
-        // Remove or deactivate the chunks
+        // Remove the chunks
         foreach (var chunk in chunksToRemove)
         {
             _createdChunks.Remove(chunk);
@@ -140,7 +142,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
             await UniTask.Yield(PlayerLoopTiming.Update);
         }
     }
-    
+
     private void Purge()
     {
         foreach (var chunk in _createdChunks)
@@ -151,78 +153,88 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     private async UniTask GenerateLevelChunks()
     {
-        var exitPoint = Vector3.zero;
-        do
+        while (Vector3.Distance(_lastChunkExit, LevelGeneratorPointer.position) < GeneratorPointerRadius)
         {
-            // Get exit point for the last created chunk
-            if (_lastCreatedChunk)
-            {
-                // Filter only active PatternExit components
-                var activeExits = _lastCreatedChunk
-                    .GetComponentsInChildren<LevChunkExit>()
-                    .Where(exit => exit.gameObject.activeInHierarchy)
-                    .ToArray();
-
-                if (activeExits.Length == 0)
-                {
-                    Debug.LogError($"No active PatternExit found in {_lastCreatedChunk.name} chunk.");
-                    return;
-                }
-
-                exitPoint = _rnd.FromArray(activeExits).transform.position;
-            }
-
-            if (Vector3.Distance(exitPoint, LevelGeneratorPointer.position) > GeneratorPointerRadius)
-                return;
-
-            Debug.Log($"Chunk spawn {PrefabTest.name}, frame:{Time.frameCount}");
-            var nextChunkPrefabName = GetNextChunkPrefabName();
-            var newChunk = InstantiateChunk(PrefabTest, -1, LevelParent, exitPoint);
+            // Spawn next chunk
+            var newChunkPrefab = GetNextChunkPrefab();
+            Debug.Log($"Spawning level chunk: {newChunkPrefab.name}, frame:{Time.frameCount}");
+            var newChunk = InstantiateChunk(newChunkPrefab, -1, LevelParent, _lastChunkExit);
             Assert.IsNotNull(newChunk);
-            
-            await UniTask.Yield(PlayerLoopTiming.Update); // Skip frame to have a complete instance of the chunk on the next frame
-            newChunk.GetComponent<TriggerLevChunkSpawn>()?.Trigger();
-            Debug.Log($"Chunk spawned finally, frame:{Time.frameCount}");
-            
-            // Fit entry 
-            var activeEntries = newChunk
-                .GetComponentsInChildren<LevChunkEntry>()
-                .Where(e => e.gameObject.activeInHierarchy)
-                .ToArray();
-            
-            if (activeEntries.Length == 0)
-            {
-                Debug.LogError($"No active PatternEntry found in the new chunk {newChunk.name}.");
-                return;
-            }
 
-            var entry = _rnd.FromArray(activeEntries);
-            var entryPoint = entry.transform.position;
-            var offset = exitPoint - entryPoint;
-            newChunk.transform.position += offset + Vector3.right*Tile.TileSize;
-            
+            await UniTask.Yield(PlayerLoopTiming
+                .Update); // Skip frame to have a complete instance of the chunk on the next frame
+
+            // Get random entry 
+            var newChunkEntry = GetRandomEntry(newChunk);
+
+            // Get random exit
+            var newChunkExit = GetRandomExit(newChunk);
+
+            Debug.Assert(newChunkEntry);
+            Debug.Assert(newChunkExit);
+
+            // Fit position of new chunk to previous exit
+            var offset = _lastChunkExit - newChunkEntry.transform.position;
+            newChunk.transform.position += offset + Vector3.right * Tile.TileSize;
+
+            // Trigger Level Chunk Spawn event
+            newChunk.GetComponent<TriggerLevChunkSpawn>()?.Trigger();
+
             // Session first pack of chunks started to generate 
-            if (!_lastCreatedChunk)
+            if (_lastCreatedChunk == null)
             {
                 _sessionFirstPackOfChunks = true;
-                SpawningTile = entry.GetComponent<Tile>();
+                SpawningTile = newChunkEntry.GetComponent<Tile>();
             }
 
-            _lastCreatedChunk = newChunk; 
+            _lastCreatedChunk = newChunk;
+            _lastChunkExit = newChunkExit.transform.position;
             _createdChunks.Add(newChunk);
-
-        } while (Vector3.Distance(exitPoint, LevelGeneratorPointer.position) < GeneratorPointerRadius);
+        }
     }
 
-    private string GetNextChunkPrefabName()
+    private LevChunkExit GetRandomExit(GameObject newChunk)
     {
-        if (_currentSegmentConfiguration == null)
+        var activeExits = newChunk
+            .GetComponentsInChildren<LevChunkExit>()
+            .Where(exit => exit.gameObject.activeInHierarchy)
+            .ToArray();
+
+        if (activeExits.Length == 0)
         {
-            // Load segment configuration and set variables 
-            _currentSegmentConfiguration = LoadSegmentConfiguration(_lastSegmentID);
+            Debug.LogError($"No active PatternExit found in {newChunk.name} chunk.");
+            return null;
         }
 
-        return "";
+        return _rnd.FromArray(activeExits);
+    }
+
+    private LevChunkEntry GetRandomEntry(GameObject newChunk)
+    {
+        var activeEntries = newChunk
+            .GetComponentsInChildren<LevChunkEntry>()
+            .Where(e => e.gameObject.activeInHierarchy)
+            .ToArray();
+
+        if (activeEntries.Length == 0)
+        {
+            Debug.LogError($"No active PatternEntry found in chunk {newChunk.name}.");
+            return null;
+        }
+
+        return _rnd.FromArray(activeEntries);
+    }
+
+    private GameObject GetNextChunkPrefab()
+    {
+        return PrefabTest;
+        // if (_currentSegmentConfiguration == null)
+        // {
+        //     // Load segment configuration and set variables 
+        //     _currentSegmentConfiguration = LoadSegmentConfiguration(_lastSegmentID);
+        // }
+        //
+        // return "";
     }
 
     public GameObject InstantiateChunk(GameObject prefab, long seed, Transform parent, Vector3 connectionPoint)
@@ -233,11 +245,11 @@ public class LevelGenerator : Singleton<LevelGenerator>
         chunk.name = prefab.name;
         return chunk;
     }
-    
+
     private void DeserializeGeneratorState()
     {
     }
-    
+
     public static SegmentConfiguration LoadSegmentConfiguration(int segmentID)
     {
         // Load the JSON file from Resources
@@ -248,7 +260,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
             Debug.LogError($"s{segmentID}.json file not found in Resources.");
             return null;
         }
-        
+
         SegmentConfiguration tempConfig = JsonUtility.FromJson<SegmentConfiguration>(jsonFile.text);
 
         // Process the ChunksPool to handle multiple chunk names in one field
