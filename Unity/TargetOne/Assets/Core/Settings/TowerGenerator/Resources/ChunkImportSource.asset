@@ -21,9 +21,9 @@ MonoBehaviour:
   EnableImport: 1
   EnableCleanupFbxRoot: 0
   AddColliders: 1
-  CastShadows: 1
-  ApplyMaterials: 0
-  CastleChunkMat: {fileID: 0}
+  CastShadows: 0
+  ApplyMaterials: 1
+  CastleChunkMat: {fileID: 2100000, guid: 970551cd2a1b39e4f9a635b61db92915, type: 2}
   Scale: 1
   _metasOutputPath: 
   _chunksOutputPath: Assets\Core\Prefabs\LevChunks

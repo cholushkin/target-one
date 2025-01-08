@@ -15,6 +15,7 @@ using UnityEditor.Events;
 public class Tile : MonoBehaviour
 {
     public LogChecker LogChecker;
+    public Transform Visual;
     public const float TileSize = 2f;
 
     public Vector3 Forward => transform.right; // Local X
@@ -25,7 +26,7 @@ public class Tile : MonoBehaviour
     
     private void OnDrawGizmos()
     {
-        if (LogChecker.Gizmos)
+        if (LogChecker != null && LogChecker.Gizmos)
         {
             // Draw local axes
             Gizmos.color = Color.red; // X-axis

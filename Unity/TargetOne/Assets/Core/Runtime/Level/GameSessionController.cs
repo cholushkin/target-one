@@ -7,6 +7,7 @@ using UnityEngine.Assertions;
 
 public class GameSessionController : Singleton<GameSessionController>
     , IHandle<LevelGenerator.EventLevelLoaded>
+    , IHandle<TriggerLevChunkEnter.EventTriggerLevChunkEnter>
 {
     [Required]
     public TileWalker Walker;
@@ -14,6 +15,7 @@ public class GameSessionController : Singleton<GameSessionController>
     public LevelGenerator LevelGenerator;
     public float GameSpeed = 2;
     public long LastCheckPoint;
+    public LevChunk CurrentLevChunk { get; private set; }
 
     protected override void Awake()
     {
@@ -33,5 +35,10 @@ public class GameSessionController : Singleton<GameSessionController>
     public void Handle(LevelGenerator.EventLevelLoaded message)
     {
         StartSession();
+    }
+
+    public void Handle(TriggerLevChunkEnter.EventTriggerLevChunkEnter message)
+    {
+        CurrentLevChunk = message.LevChunkEnter;
     }
 }

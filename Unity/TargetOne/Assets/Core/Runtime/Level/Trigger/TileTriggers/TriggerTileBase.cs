@@ -1,4 +1,5 @@
 using Core;
+using NaughtyAttributes;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Serialization;
@@ -16,8 +17,9 @@ public class TriggerTileBase : TriggerBase
 
     #endregion
 
-    [FormerlySerializedAs("EnterFromTile")] public Tile EnteredFromTile;
-    public bool IsWalkerEntered;
+    [ReadOnly] public Tile EnteredFromTile;
+    [ReadOnly] public Tile Tile;
+    [ReadOnly] public bool IsWalkerEntered;
     private bool _wasActivatedOnThisVisit;
 
 
@@ -63,14 +65,15 @@ public class TriggerTileBase : TriggerBase
         var distance = Vector3.Distance(tileWalker.transform.position, transform.position);
         return distance / (Tile.TileSize * 0.5f) <= ActiveRadius;
     }
-    
+
     public void RegisterWalkerEnter(TileWalker tileWalker, Tile fromTile)
     {
         Assert.IsNotNull(tileWalker);
         EnteredFromTile = fromTile;
+        Tile = tileWalker.CurrentTile;
         IsWalkerEntered = true;
     }
-    
+
     public void RegisterWalkerExit(TileWalker tileWalker)
     {
         Assert.IsNotNull(tileWalker);

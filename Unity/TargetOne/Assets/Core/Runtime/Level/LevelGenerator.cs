@@ -64,7 +64,6 @@ public class LevelGenerator : Singleton<LevelGenerator>
     {
         base.Awake();
         DeserializeGeneratorState();
-        StartGenerate();
     }
 
     private void OnDestroy()
