@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 741369d3a04597340a175cc533e9341c, type: 3}
-  m_Name: ChunkImportSource
+  m_Name: LevChunkImportSource
   m_EditorClassIdentifier: 
   FbxInputPath:
   - Assets\Core\Fbx\LevChunks
@@ -23,7 +23,8 @@ MonoBehaviour:
   AddColliders: 1
   CastShadows: 0
   ApplyMaterials: 1
-  CastleChunkMat: {fileID: 2100000, guid: 970551cd2a1b39e4f9a635b61db92915, type: 2}
+  DefaultMaterial: {fileID: 2100000, guid: 970551cd2a1b39e4f9a635b61db92915, type: 2}
   Scale: 1
   _metasOutputPath: 
   _chunksOutputPath: Assets\Core\Prefabs\LevChunks
+  _chunksVariantsOutputPath: Assets\Core\Prefabs\LevChunksUsr

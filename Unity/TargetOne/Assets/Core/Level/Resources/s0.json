@@ -1,8 +1,7 @@
 {
   "Seed": 12345,
   "SegmentID": 1,
-  "ColorScheme": "Dark",
-  "VisualSetting": "Fantasy",
+  "FantasySetting": "Castle",
   "ChunksNumber": {
     "From": 1,
     "To": 5

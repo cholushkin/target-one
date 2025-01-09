@@ -7,7 +7,7 @@ namespace Core
     public class GameplayState : AppStateManager.AppState<GameplayState>
     {
         public LevelGenerator LevelGenerator;
-        
+        public int ActiveAccountSlot;
         public override void AppStateEnter()
         {
             LogChecker.Print(LogChecker.Level.Verbose, "> GameplayState.AppStateEnter");
@@ -17,6 +17,7 @@ namespace Core
 
         public override void AppStateLeave()
         {
+            LogChecker.Print(LogChecker.Level.Verbose, "< GameplayState.AppStateLeave");
         }
     }
 }

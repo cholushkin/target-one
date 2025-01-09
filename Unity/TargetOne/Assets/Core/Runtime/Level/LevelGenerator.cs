@@ -25,8 +25,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
         public long Seed; // Some specific Segment seed (or -1 to control from outer seed(LevelGenerator.Seed) 
         public int SegmentID; // More like sequential number 
-        public string ColorScheme;
-        public string VisualSetting; // fantasy or visual setting of the segment
+        public string FantasySetting; // fantasy or visual setting of the segment
         public RangeInt ChunksNumber; // Amount of chunks in current segment
         public ChunkConfig[] ChunksPool; // Current segment chunks pool to generate from
     }
