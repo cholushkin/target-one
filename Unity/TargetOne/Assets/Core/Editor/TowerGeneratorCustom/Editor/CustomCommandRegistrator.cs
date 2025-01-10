@@ -8,9 +8,7 @@ namespace TowerGenerator.FbxCommands
     {
         static CustomCommandRegistrator()
         {
-            // Example:
-            // FbxCommandExecutor.RegisterFbxCommand(new FbxCommandExecutor.CommandRegistrationEntry { Name = "Fractured", Creator = () => new FbxCommandFractured("Fractured") });
+            FbxCommandExecutor.RegisterFbxCommand(new FbxCommandExecutor.CommandRegistrationEntry { Name = "NonReplaceable", Creator = () => new FbxCommandNonReplaceable("NonReplaceable", 10) });
         }
-
     }
 }

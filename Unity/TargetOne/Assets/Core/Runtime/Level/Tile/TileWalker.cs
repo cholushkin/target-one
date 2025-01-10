@@ -298,20 +298,20 @@ namespace Core
             transform.SetParent(CurrentTile.transform);
             if (SmoothTileFollower)
                 SmoothTileFollower.transform.SetParent(CurrentTile.transform);
-            
+
             // Set rotation to tile forward
             transform.rotation = Quaternion.LookRotation(CurrentTile.Forward, CurrentTile.Up);
             if (SmoothTileFollower)
                 SmoothTileFollower.Init(transform.position, transform.rotation);
-            
+
             PostWalkerAttachToTileEvent(this, null, CurrentTile);
         }
-        
+
         public void GoToState(State newState)
         {
             _stateMachine.GoTo(newState);
         }
-        
+
         private bool StartMoveToNextTile()
         {
             var nextTile = GetNextTile();
@@ -389,7 +389,7 @@ namespace Core
             SetSubdestinationPointer(CurrentTile, fallingPoint);
             GlobalEventAggregator.EventAggregator.Publish(new EventStartFalling
             {
-                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance.GameSpeed )
+                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance.GameSpeed)
             }); // start lowering hovering height on visual
         }
 
@@ -483,7 +483,7 @@ namespace Core
             _eventWalkerAttachToTile.CurrentTile = currentTile;
             GlobalEventAggregator.EventAggregator.Publish(_eventWalkerAttachToTile);
         }
-        
+
         private static void PostWalkerDetachFromTile(TileWalker tileWalker, Tile detachedTile)
         {
             _eventWalkerDetachFromTile.TileWalker = tileWalker;

@@ -35,7 +35,7 @@ namespace TowerGenerator.ChunkImporter
 
                 // Add SphereCollider to the Tile GameObject (not the Visual GameObject)
                 var sphereCollider = tileGameObject.AddComponent<SphereCollider>();
-                chunkImportInformation.CollidersApplied++;
+                chunkImportInformation.Inc("TileSphereCollidersAppliedAmmount");
 
                 // Calculate the bounding box of the mesh for the SphereCollider
                 var meshFilter = render.gameObject.GetComponent<MeshFilter>();
