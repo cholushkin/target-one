@@ -185,7 +185,7 @@ namespace Core
         {
             // Update velocity
             _velocity = Mathf.SmoothDamp(_velocity, TargetSpeed, ref _velocityChangeRate, VelocitySmoothTime);
-            var finalVelocity = _velocity * GameSessionController.Instance.GameSpeed;
+            var finalVelocity = _velocity * (GameSessionController.Instance?.GameSpeed??1f);
 
             // Calculate the direction to the destination
             Vector3 direction = (SubDestinationPointer.transform.localPosition - transform.localPosition).normalized;
@@ -389,7 +389,7 @@ namespace Core
             SetSubdestinationPointer(CurrentTile, fallingPoint);
             GlobalEventAggregator.EventAggregator.Publish(new EventStartFalling
             {
-                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance.GameSpeed)
+                TileWalker = this, Duration = Tile.TileSize / (_speedBeforeStartFalling * GameSessionController.Instance?.GameSpeed ?? 1f)
             }); // start lowering hovering height on visual
         }
 

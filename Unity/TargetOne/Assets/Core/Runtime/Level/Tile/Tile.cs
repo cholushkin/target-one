@@ -23,6 +23,10 @@ public class Tile : MonoBehaviour
     public Vector3 Normal => transform.forward; // Local Z
     public Vector3 Up => Normal;
 
+    private void Reset()
+    {
+        Visual = transform.Find("Visual");
+    }
     
     private void OnDrawGizmos()
     {

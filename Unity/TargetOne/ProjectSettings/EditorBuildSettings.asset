@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Core/Scenes/CompanyLogo.unity
     guid: 292356a8607ecdd4a95eb06e5aa7559d
   - enabled: 1
+    path: Assets/Core/Scenes/GameLogo.unity
+    guid: 3f0e2dbee577d43428c973e6db8eb586
+  - enabled: 1
     path: Assets/Core/Scenes/Game.unity
     guid: 99c9720ab356a0642a771bea13969a05
   m_configObjects:

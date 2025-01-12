@@ -45,18 +45,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c7295c54bb451649a7c000f77aa6467, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  NextSceneName: System
+  LoadNextScene: 0
+  NextSceneName: Game
   DelayToTheNextScene: 5
+  TextQuantumEffect: {fileID: 0}
+  PlayTextQuantumEffectChance: 0.1
   PictureFrame: {fileID: 0}
   RevealSDRender: {fileID: 0}
   RevealBG: {fileID: 0}
   Chunk: {fileID: 0}
+  Rotating: {fileID: 0}
+  Scaling: {fileID: 0}
   RandomizationMaterials:
-  - {fileID: 11400000, guid: f8dfc8cf54a423b4ba9973447a601573, type: 2}
-  - {fileID: 11400000, guid: 7d84efc13cb3ea64ba40bd994e5be7ce, type: 2}
-  RandomizationMaterialsForRendering:
-  - {fileID: 11400000, guid: f8dfc8cf54a423b4ba9973447a601573, type: 2}
-  - {fileID: 11400000, guid: 7d84efc13cb3ea64ba40bd994e5be7ce, type: 2}
+  - {fileID: 11400000, guid: c08ed7785bbc7084e87af7f5268c6206, type: 2}
+  - {fileID: 11400000, guid: 8cf2153cfc59e5c448147e29d41f6dc0, type: 2}
   RenderStates:
   - SHA256: 
     Spr:
@@ -73,7 +75,7 @@ MonoBehaviour:
   - 0.25
   - 0.25
   - 1
-  LogoAtlasMaterial: {fileID: 2100000, guid: 51be67804ce86a04fb155e7b27a664ce, type: 2}
+  LogoAtlasMaterial: {fileID: 2100000, guid: cdefe1d76ad33ad4dbafcc1be5e2b36d, type: 2}
   PitchRandomizationRange:
     From: 0.95
     To: 1.2
