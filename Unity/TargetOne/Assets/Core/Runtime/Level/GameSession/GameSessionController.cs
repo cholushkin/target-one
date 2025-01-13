@@ -26,7 +26,7 @@ public class GameSessionController : Singleton<GameSessionController>
     public void StartSession()
     {
         Debug.Log($"Session start, frame {Time.frameCount}");
-        var startingTile = LevelGenerator.SpawningTile;
+        var startingTile = LevelGenerator.StartingTile;
         Assert.IsNotNull(startingTile);
         Walker.Init(startingTile);
         Walker.GoToState(TileWalker.State.Walking);

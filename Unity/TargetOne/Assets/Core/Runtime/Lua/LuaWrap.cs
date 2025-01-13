@@ -32,9 +32,9 @@ public static class LuaWrap
     }
 
     [ConsoleMethod("level.setsegmentconfig", "setsegcfg", "Set configuration for level generator")]
-    public static void SetLevelGeneratorSegmentConfig(LevelGenerator.SegmentConfiguration segConfig)
+    public static void SetLevelGeneratorSegmentConfig(int segmentIndex)
     {
-        Debug.Log($"{segConfig}");
+        LevelGenerator.Instance.SetCurrentSegment(segmentIndex);
     }
 
     #endregion

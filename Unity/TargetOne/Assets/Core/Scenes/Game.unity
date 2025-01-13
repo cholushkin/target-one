@@ -406,7 +406,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.56078434, g: 0.59631515, b: 0.9308176, a: 1}
+  m_BackGroundColor: {r: 1, g: 1, b: 1, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -927,7 +927,6 @@ MonoBehaviour:
   Walker: {fileID: 772960401}
   GeneratorPointerRadius: 100
   LevelParent: {fileID: 791482970}
-  PrefabTest: {fileID: 7994336148573341879, guid: 02be3d49115d15148ab1af44c63cbfdb, type: 3}
 --- !u!4 &791482970
 Transform:
   m_ObjectHideFlags: 0
@@ -1823,13 +1822,14 @@ MonoBehaviour:
     AddComponentName: 0
     LocalLogBuffer: 
   ActiveAccounts:
+    ActiveAccountIndex: 0
     GameStates:
-    - Checkpoint: 0
-      Coins: 0
-    - Checkpoint: 0
-      Coins: 0
-    - Checkpoint: 0
-      Coins: 0
+    - Checkpoint: -1
+      Coins: -1
+    - Checkpoint: -1
+      Coins: -1
+    - Checkpoint: -1
+      Coins: -1
 --- !u!4 &1913307498
 Transform:
   m_ObjectHideFlags: 0
@@ -1989,7 +1989,6 @@ MonoBehaviour:
     AddComponentName: 0
     LocalLogBuffer: 
   LevelGenerator: {fileID: 791482969}
-  ActiveAccountSlot: 0
 --- !u!1 &1988517474
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,16 +1,28 @@
+using Gamelib;
 using UnityEngine;
 
 public class GameLogoController : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public float ShowDuration;
+    public string NextSceneName;
+    void Awake()
     {
-        
+        ScreenTransitionEffects.Instance.PlayEffect("ColorFadeReveal", null);
+        Invoke(nameof(LoadScene), ShowDuration);
     }
-
-    // Update is called once per frame
-    void Update()
+    
+    private void LoadScene()
     {
-        
+        ScreenTransitionEffects.Instance.PlayEffect("ColorFadeHide",
+            () =>
+            {
+                if (SceneLoader.Instance == null)
+                {
+                    Debug.LogWarning("No SceneLoader.Instance. You need to run current scene with dependencies");
+                    return;
+                }
+                SceneLoader.Instance.Replace(NextSceneName, "GameLogo", true);
+            }
+        );
     }
 }

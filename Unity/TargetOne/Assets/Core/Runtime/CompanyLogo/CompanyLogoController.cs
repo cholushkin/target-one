@@ -55,13 +55,18 @@ public class CompanyLogoController : MonoBehaviour
 
     private ChunkControllerBase _chunkControllerBase;
 
-    async void Awake()
+     void Awake()
     {
         _chunkControllerBase = Chunk.GetComponent<ChunkControllerBase>();
         Assert.IsNotNull(_chunkControllerBase);
         _chunkControllerBase.Init();
         _chunkControllerBase.SetConfiguration();
+        
+        ScreenTransitionEffects.Instance.PlayEffect("ColorFadeReveal", StartAnimation);
+    }
 
+    private async void StartAnimation()
+    {
         // Wait for the first frame to be fully rendered
         await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
 
@@ -134,12 +139,16 @@ public class CompanyLogoController : MonoBehaviour
 
     private void LoadScene()
     {
-        if (SceneLoader.Instance == null)
-        {
-            Debug.LogWarning("No SceneLoader.Instance. You need to run current scene with dependencies");
-            return;
-        }
-
-        SceneLoader.Instance.Replace(NextSceneName, "CompanyLogo", true);
+        ScreenTransitionEffects.Instance.PlayEffect("ColorFadeHide",
+            () =>
+            {
+                if (SceneLoader.Instance == null)
+                {
+                    Debug.LogWarning("No SceneLoader.Instance. You need to run current scene with dependencies");
+                    return;
+                }
+                SceneLoader.Instance.Replace(NextSceneName, "CompanyLogo", true);
+            }
+        );
     }
 }

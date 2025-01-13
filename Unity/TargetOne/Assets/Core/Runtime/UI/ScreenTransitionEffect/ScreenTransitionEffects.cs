@@ -9,6 +9,7 @@ using UnityEngine.Assertions;
 
 public class ScreenTransitionEffects : Singleton<ScreenTransitionEffects>
 {
+    public Transform InitialBackground;
     public string LastEffectPlayed { get; private set; }
     private List<Transform> _effects;
     private GameObject _currentEffect;
@@ -19,9 +20,13 @@ public class ScreenTransitionEffects : Singleton<ScreenTransitionEffects>
         base.Awake();
         _effects = transform.Children().ToList();
 
-        // hide all if user forgot to hide it
-        foreach (Transform effect in transform)
+        // Hide all if user forgot to hide it
+        var transitionEffects = GetComponentsInChildren<TransitionEffect>();
+        foreach (var effect in transitionEffects)
+        {
             Assert.IsFalse(effect.gameObject.activeSelf);
+            effect.gameObject.SetActive(false);
+        }
     }
 
     public void PlayEffect(string effectName, Action endCallback)
@@ -32,6 +37,9 @@ public class ScreenTransitionEffects : Singleton<ScreenTransitionEffects>
             _currentEffect = null;
         }
 
+        if(InitialBackground != null)
+            InitialBackground.gameObject.SetActive(false);
+        
         Assert.IsNull(_currentEffect);
         var effect = FindEffect(effectName);
         LastEffectPlayed = effectName;

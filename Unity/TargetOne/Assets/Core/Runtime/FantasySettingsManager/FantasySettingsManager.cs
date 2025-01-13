@@ -21,5 +21,5 @@ public class FantasySettingsManager : Singleton<FantasySettingsManager>
     }
 
     public Settings[] FanatasySettings;
-
+    public const string DefaultFantasySettingName = "Castle";
 }

@@ -3,6 +3,7 @@ using System.IO;
 using System.Security.Cryptography;
 using System.Text;
 using GameLib.Alg;
+using NaughtyAttributes;
 using UnityEngine;
 
 public class AccountManager : Singleton<AccountManager>
@@ -17,6 +18,7 @@ public class AccountManager : Singleton<AccountManager>
     [Serializable]
     public class Accounts
     {
+        public byte ActiveAccountIndex;
         public GameState[] GameStates = new GameState[MaxAccounts];
     }
 
@@ -25,7 +27,7 @@ public class AccountManager : Singleton<AccountManager>
 
     // todo: Replace these with securely generated and stored values.
     private static readonly byte[] Key = Encoding.UTF8.GetBytes("8635sG-3GKoD7;Ep"); // 16-byte key
-    private static readonly byte[] IV = Encoding.UTF8.GetBytes("x:GR904N6eIZ'22Z");  // 16-byte IV
+    private static readonly byte[] IV = Encoding.UTF8.GetBytes("x:GR904N6eIZ'22Z"); // 16-byte IV
 
     public Accounts ActiveAccounts;
 
@@ -40,7 +42,7 @@ public class AccountManager : Singleton<AccountManager>
         SaveAccounts();
     }
 
-    private void  DeserializeActiveAccounts()
+    private void DeserializeActiveAccounts()
     {
         string path = GetAccountsSavePath();
         if (File.Exists(path))
@@ -55,16 +57,21 @@ public class AccountManager : Singleton<AccountManager>
             catch (Exception e)
             {
                 Debug.LogError($"Failed to load accounts ({path}): {e.Message}");
-                ActiveAccounts = InitializeEmptyAccounts();
+                ActiveAccounts = CreateEmptyAccounts();
             }
         }
         else
         {
             Debug.Log($"No existing account data found ({path}). Initializing new accounts.");
-            ActiveAccounts = InitializeEmptyAccounts();
+            ActiveAccounts = CreateEmptyAccounts();
         }
     }
-    
+
+    public GameState GetAccountData(int accountIndex)
+    {
+        return ActiveAccounts.GameStates[accountIndex];
+    }
+
     public bool IsAccountInitialized(int accountIndex)
     {
         if (accountIndex >= 0 && accountIndex < MaxAccounts)
@@ -79,7 +86,7 @@ public class AccountManager : Singleton<AccountManager>
             return false;
         }
     }
-    
+
     public void ClearAccount(int accountIndex)
     {
         if (accountIndex >= 0 && accountIndex < MaxAccounts)
@@ -120,13 +127,15 @@ public class AccountManager : Singleton<AccountManager>
         return Path.Combine(Application.persistentDataPath, AccountsStorageFile);
     }
 
-    private Accounts InitializeEmptyAccounts()
+    private Accounts CreateEmptyAccounts()
     {
         Accounts newAccounts = new Accounts();
         for (int i = 0; i < newAccounts.GameStates.Length; i++)
-        {
-            newAccounts.GameStates[i] = new GameState { Checkpoint = -1, Coins = -1 };
-        }
+            newAccounts.GameStates[i] = new GameState
+            {
+                Checkpoint = -1,
+                Coins = -1
+            };
 
         return newAccounts;
     }
@@ -170,6 +179,30 @@ public class AccountManager : Singleton<AccountManager>
 
                 return ms.ToArray();
             }
+        }
+    }
+
+    
+    [Button]
+    public void DeleteAllAccounts()
+    {
+        string path = GetAccountsSavePath();
+        if (File.Exists(path))
+        {
+            try
+            {
+                File.Delete(path);
+                ActiveAccounts = CreateEmptyAccounts();
+                Debug.Log("All accounts have been deleted and reset.");
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Failed to delete accounts file ({path}): {e.Message}");
+            }
+        }
+        else
+        {
+            Debug.Log("No accounts file found to delete.");
         }
     }
 }

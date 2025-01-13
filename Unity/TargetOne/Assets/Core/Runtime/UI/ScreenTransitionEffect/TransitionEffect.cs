@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.Assertions;
 
 public class TransitionEffect : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class TransitionEffect : MonoBehaviour
 
     public virtual void OnEnable()
     {
+        Assert.IsTrue(Duration != 0f);
         var animator = GetComponent<Animator>();
         if (animator != null)
         {
