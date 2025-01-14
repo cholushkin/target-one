@@ -21,6 +21,7 @@ public class SegmentConfiguration
     public Range ChunksNumber; // Range for the number of chunks to generate in this segment
     public ChunkConfig[] ChunksPool; // Pool of available chunks for generation in this segment
 
+    // todo: lua handler: change weather, change music, etc.
 
     public static SegmentConfiguration CreateDefaultSegmentConfiguration(long segmentID)
     {
