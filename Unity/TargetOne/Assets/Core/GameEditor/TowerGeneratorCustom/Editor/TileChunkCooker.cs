@@ -14,6 +14,7 @@ namespace TowerGenerator.ChunkImporter
             {
                 if (!render.gameObject.name.StartsWith("Tile"))
                     continue;
+
                 if (render.gameObject.GetComponent<IgnoreAddCollider>() != null)
                     continue;
                 if (render.gameObject.GetComponent<MeshCollider>() != null)
@@ -28,6 +29,13 @@ namespace TowerGenerator.ChunkImporter
                 tileGameObject.transform.localPosition = render.gameObject.transform.localPosition;
                 tileGameObject.transform.localRotation = render.gameObject.transform.localRotation;
                 tileGameObject.transform.localScale = render.gameObject.transform.localScale;
+                
+                // Add entry/exit
+                if (tileGameObject.name.Contains("Entry"))
+                    tileGameObject.AddComponent<LevChunkEntry>();
+                if (tileGameObject.name.Contains("Exit"))
+                    tileGameObject.AddComponent<LevChunkExit>();
+                
 
                 // Reparent the original render.gameObject under the new Tile GameObject
                 render.gameObject.transform.SetParent(tileGameObject.transform);
@@ -49,6 +57,21 @@ namespace TowerGenerator.ChunkImporter
                 sphereCollider.center = bounds.center;
                 sphereCollider.radius = Mathf.Max(bounds.extents.x, bounds.extents.y, bounds.extents.z);
             }
+        }
+
+        protected override void ConfigureChunkController(GameObject chunkSemicooked, ChunkImportState chunkImportInformation)
+        {
+            base.ConfigureChunkController(chunkSemicooked, chunkImportInformation);
+            var levChunk = chunkSemicooked.AddComponent<LevChunk>();
+            chunkSemicooked.AddComponent<TriggerLevChunkSpawn>();
+            chunkSemicooked.AddComponent<TriggerLevChunkEnter>();
+            chunkSemicooked.AddComponent<TriggerTileLevChunkExit>();
+            
+            // Add cameras container
+            GameObject cinamachineCameras = new GameObject("CinamachineCamerasContainer");
+            cinamachineCameras.transform.SetParent(chunkSemicooked.transform);
+            var camerasContainer = cinamachineCameras.AddComponent<LevChunkCamerasContainer>();
+            levChunk.Cameras = camerasContainer;
         }
     }
 }
