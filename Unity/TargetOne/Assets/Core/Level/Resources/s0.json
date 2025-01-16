@@ -8,12 +8,12 @@
   },
   "ChunksPool": [
     {
-      "ChunkName": "ChunkA",
+      "ChunkName": "ChunkAUsr",
       "Probability": 0.5,
       "Seed": -1
     },
     {
-      "ChunkName": "ChunkB, ChunkC,ChunkD",
+      "ChunkName": "ChunkBUsr,ChunkCUsr,ChunkDUsr",
       "Probability": 0.3,
       "Seed": 54321
     }

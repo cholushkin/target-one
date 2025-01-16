@@ -18,7 +18,6 @@ MonoBehaviour:
   ChunkCooker: TileChunkCooker
   EnableMetaGeneration: 0
   GenerateVariant: 1
-  IsPack: 0
   EnableImport: 1
   EnableCleanupFbxRoot: 0
   AddColliders: 1
@@ -30,4 +29,4 @@ MonoBehaviour:
   Scale: 1
   _metasOutputPath: 
   _chunksOutputPath: Assets\Core\Prefabs\LevChunks
-  _chunksVariantsOutputPath: Assets\Core\Prefabs\LevChunksUsr
+  _chunksVariantsOutputPath: Assets\Core\Prefabs\LevChunksUsr\Resources
