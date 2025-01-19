@@ -21,6 +21,13 @@ public static class LuaWrap
         }
         return obj != null;
     }
+
+    [ConsoleMethod("core.overridelevchunksequence", "levchunkseq", "Overrides lev chunk sequence on generator segment")]
+    public static void OverrideLevChunkSequence(string[] sequence)
+    {
+        LevelGenerator.Instance.OverrideLevChunkSequenceForCurrentSegment(sequence);
+    }
+    
     #endregion
     
     #region Debug

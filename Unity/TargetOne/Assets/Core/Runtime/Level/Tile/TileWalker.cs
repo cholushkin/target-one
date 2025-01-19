@@ -87,6 +87,7 @@ namespace Core
         public float CurrentSpeed => TargetSpeed * GameSessionController.Instance.GameSpeed;
         public bool StickToTile { get; set; }
         public TileState CurrentTileState { get; set; }
+        public State CurrentState => _stateMachine.CurrentState.State;
 
         private Tile _targetTile;
 

@@ -7,7 +7,7 @@ using UnityEngine.Assertions;
 
 public class GameSessionController : Singleton<GameSessionController>
     , IHandle<LevelGenerator.EventLevelLoaded>
-    , IHandle<TriggerLevChunkEnter.EventTriggerLevChunkEnter>
+    , IHandle<TriggerTileLevChunkEnter.EventTriggerTileLevChunkEnter>
 {
     [Required]
     public TileWalker Walker;
@@ -37,7 +37,7 @@ public class GameSessionController : Singleton<GameSessionController>
         StartSession();
     }
 
-    public void Handle(TriggerLevChunkEnter.EventTriggerLevChunkEnter message)
+    public void Handle(TriggerTileLevChunkEnter.EventTriggerTileLevChunkEnter message)
     {
         CurrentLevChunk = message.LevChunkEnter;
     }

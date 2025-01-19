@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -7,9 +6,8 @@ using GameLib.Alg;
 using GameLib.Random;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
+using uconsole;
 using UnityEngine.Assertions;
-using Random = UnityEngine.Random;
-using RangeInt = GameLib.Random.RangeInt;
 
 public class LevelGenerator : Singleton<LevelGenerator>
 {
@@ -18,14 +16,15 @@ public class LevelGenerator : Singleton<LevelGenerator>
     }
     
     #region Unity inspector
-    
+
+    public int LastEverSegment; // Move to configuration ScriptableObject
     public Transform LevelGeneratorPointer; // Pointer marking the current level generation position
     public TileWalker Walker; // Entity controlling the generator's movement
     [Tooltip("Radius within which level chunks will be generated")]
     public float GeneratorPointerRadius;
     public Transform LevelParent; // Parent object to organize level chunks
-    [Tooltip("There are a limited number of checkpoint chunks (unlike regular LevChunks), therefore we can list them here")]
-    public GameObject[] CheckpointLevChunks;
+    [Tooltip("There are a limited number of checkpoint chunks (unlike regular LevChunks), therefore we can list them here. They are also special case chunk, which go as a first chunk of each segment")]
+    public string[] CheckpointLevChunks;
     
     #endregion
 
@@ -34,12 +33,17 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     // Variables related to the current segment
     private SegmentConfiguration _currentSegmentConfiguration; // Configuration for the current segment
-    private int _chunksAmountInSegment; // Total number of chunks in this segment
-    private int _chunkInstantiatedInSegment;
-    private bool _isRegenerated; // In case if player can't complete the segment, we allow to regenerate it without pickup-items
     private long _currentSegmentIndex;
-    private float[] _levChunksProbsSegment;
+    private int _chunksAmountInSegment;
+    private int _chunkInstantiatedInSegment;
+    private Queue<string> _levChunksSequence;
     private IPseudoRandomNumberGenerator _segmentRnd;
+    private bool _dynamicProbability; // todo: impl lua handler
+    private bool _avoidSequentialDuplicates; // todo: implement
+    private bool _isRegenerated; // In case if player can't complete the segment, we allow to regenerate it without pickup-items
+    private bool _isFinalStubReached;
+    
+    // currently supported lua handler: levchunkseq, enabledynamicprobs, enableavoidduplicates
 
     public Vector3 GetGeneratorPointerPosition => transform.position; // Position of the generator pointer
     private HashSet<GameObject> _createdChunks; // Set of currently instantiated chunks
@@ -52,6 +56,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     private void OnDestroy()
     {
+        Purge(); // Clean up all generated chunks
         StopGenerate(); // Ensure generation stops and resources are cleaned up when the generator is destroyed
     }
 
@@ -64,7 +69,6 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     public void StopGenerate()
     {
-        Purge(); // Clean up all generated chunks
         _cancellationTokenSource?.Cancel(); // Cancel ongoing generation tasks
         _cancellationTokenSource?.Dispose(); // Dispose of the cancellation token source
     }
@@ -139,13 +143,18 @@ public class LevelGenerator : Singleton<LevelGenerator>
 
     private async UniTask GenerateLevelChunks()
     {
-        var isFirstEverChunkInSession = _lastCreatedChunk == null;
-        
         // Generate new chunks until the pointer is within the generation radius
         while (Vector3.Distance(_lastChunkExit, LevelGeneratorPointer.position) < GeneratorPointerRadius)
         {
+            // Time to switch to a next segment ?
+            if (_chunkInstantiatedInSegment > _chunksAmountInSegment)
+            {
+                if (_isFinalStubReached)
+                    break;
+                SetCurrentSegment(++_currentSegmentIndex);
+            }
+            
             var newLevChunkPrefab = GetNextLevChunkPrefab(); // Get the next chunk prefab
-            Assert.IsNotNull(newLevChunkPrefab);
             Debug.Log($"Spawning level chunk: {newLevChunkPrefab.name}, frame:{Time.frameCount}");
             var newChunk = InstantiateChunk(newLevChunkPrefab, -1, LevelParent, _lastChunkExit); // Instantiate the chunk
             _chunkInstantiatedInSegment++;
@@ -215,9 +224,18 @@ public class LevelGenerator : Singleton<LevelGenerator>
         _currentSegmentConfiguration = SegmentConfiguration.LoadSegmentConfiguration(segmentIndex);
         if (_currentSegmentConfiguration == null)
         {
-            Debug.Log("No SegmentConfiguration found, loading the default one");
-            // todo: procedurally prepare segment configuration based on segmentIndex
-            _currentSegmentConfiguration = SegmentConfiguration.CreateDefaultSegmentConfiguration(segmentIndex);
+            if (segmentIndex >= LastEverSegment)
+            {
+                // Load final stub and stop further generation
+                _currentSegmentConfiguration = SegmentConfiguration.CreateFinalStubSegment(segmentIndex);
+                _isFinalStubReached = true;
+            }
+            else
+            {
+                Debug.Log("No SegmentConfiguration found, loading the default one");
+                // todo: procedurally prepare segment configuration based on segmentIndex
+                _currentSegmentConfiguration = SegmentConfiguration.CreateDefaultSegmentConfiguration(segmentIndex);
+            }
         }
 
         if (_currentSegmentConfiguration.Seed == -1)
@@ -230,37 +248,37 @@ public class LevelGenerator : Singleton<LevelGenerator>
         _segmentRnd = RandomHelper.CreateRandomNumberGenerator(_currentSegmentConfiguration.Seed); 
         _chunksAmountInSegment = _segmentRnd.FromRangeIntInclusive(_currentSegmentConfiguration.ChunksNumber); // move rnd
         _chunkInstantiatedInSegment = 0;
-        _isRegenerated = false;
+        _isRegenerated = false; 
+        _dynamicProbability = false; // Could be enabled by lua-handler
+        _avoidSequentialDuplicates = false; // Could be enabled by lua-handler
         
-        // Prepare probs array
-        _levChunksProbsSegment = new float[_currentSegmentConfiguration.ChunksPool.Length];
+        
+        // Prepare _levChunksSequence
+        var probs = new float[_currentSegmentConfiguration.ChunksPool.Length];
         for (int i = 0; i < _currentSegmentConfiguration.ChunksPool.Length; ++i)
-            _levChunksProbsSegment[i] = _currentSegmentConfiguration.ChunksPool[i].Probability;
+            probs[i] = _currentSegmentConfiguration.ChunksPool[i].Probability;
+        _levChunksSequence = new Queue<string>();
+
+        _levChunksSequence.Enqueue(_segmentRnd.FromArray(CheckpointLevChunks));
+        
+        for (int i = 0; i < _chunksAmountInSegment; ++i)
+        {
+            var rndIndex = _segmentRnd.SpawnEvent(probs);
+            _levChunksSequence.Enqueue(_currentSegmentConfiguration.ChunksPool[rndIndex].ChunkName); // move rnd
+            if (_dynamicProbability)
+                probs[rndIndex] *= 0.5f;
+        }
+        
+        // Run lua handler
+        var luaCode = _currentSegmentConfiguration.ConfigurationLuaHandlerCode;
+        if (!string.IsNullOrEmpty(luaCode))
+            ConsoleSystem.Instance.Executor.ExecuteString(luaCode);
     }
 
     private GameObject GetNextLevChunkPrefab()
     {
-        // First LevChunk of a segment
-        if (_chunkInstantiatedInSegment == 0)
-        {
-            // First LevChunk in a segment is always a checkpoint
-            return _segmentRnd.FromArray(CheckpointLevChunks); // move rnd
-        }
-        
-        // Last LevChunk of a segment
-        else if (_chunkInstantiatedInSegment > _chunksAmountInSegment)
-        {
-            // Time to switch to a next segment
-            SetCurrentSegment(++_currentSegmentIndex);
-            return GetNextLevChunkPrefab();
-        }
-
-        // Randomly pick LevChunk using probability 
-        var levChunkPoolIndex = _segmentRnd.SpawnEvent(_levChunksProbsSegment); // move rnd
-        var levChunkName = _currentSegmentConfiguration.ChunksPool[levChunkPoolIndex].ChunkName;
-        
-        // Load LevChunk prefab
-        return Resources.Load(levChunkName) as GameObject;
+        var levChunkName = _levChunksSequence.Dequeue();
+        return Resources.Load(levChunkName) as GameObject; // Load LevChunk prefab
     }
 
     public GameObject InstantiateChunk(GameObject prefab, long seed, Transform parent, Vector3 connectionPoint)
@@ -270,6 +288,14 @@ public class LevelGenerator : Singleton<LevelGenerator>
         chunk.transform.position = connectionPoint;
         chunk.name = prefab.name;
         return chunk;
+    }
+
+    public void OverrideLevChunkSequenceForCurrentSegment(string[] chunkNames)
+    {
+        _levChunksSequence.Clear();
+        foreach (var chunksName in chunkNames)
+            _levChunksSequence.Enqueue(chunksName);
+        _chunksAmountInSegment = _levChunksSequence.Count;
     }
 
     private void OnDrawGizmos()

@@ -1,3 +1,4 @@
+using Core;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -15,6 +16,8 @@ public class PlayerInputActions : MonoBehaviour
 
     private void Update()
     {
+        if (PlayerController.TileWalker.CurrentState == TileWalker.State.Awake)
+            return;
         if (interactAction.WasPressedThisFrame())
         {
             Debug.Log("Input: Interact");

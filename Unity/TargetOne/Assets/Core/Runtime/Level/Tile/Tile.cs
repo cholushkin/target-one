@@ -69,17 +69,15 @@ public class Tile : MonoBehaviour
             triggerTileButton.MaxHitCount = -1;
             triggerTileButton.OneHitMaxPerVisit = true;
 
-            var visual = transform.Find("Visual");
+            var visual = transform.FirstChildNameStartsWith("Visual");
             TileButtonAnimator tileButtonAnimator = null;
             if (visual)
             {
-                foreach (Transform t in visual.transform)
+                var buttonTransform = visual.transform.FirstChildNameStartsWith("Button");
+                if (buttonTransform != null)
                 {
-                    if (!t.gameObject.name.StartsWith("Button")) 
-                        continue;
                     tileButtonAnimator = visual.gameObject.AddComponent<TileButtonAnimator>();
-                    tileButtonAnimator.ButtonTransform = t;
-                    break;
+                    tileButtonAnimator.ButtonTransform = buttonTransform;
                 }
             }
 
@@ -131,22 +129,15 @@ public class Tile : MonoBehaviour
             triggerTubeTeleport.MaxHitCount = -1;
             triggerTubeTeleport.OneHitMaxPerVisit = true;
 
-            var visual = transform.Find("Visual");
+            var visual = transform.FirstChildNameStartsWith("Visual");
             if (visual)
             {
                 if (visual.gameObject.GetComponent<TubeTeleportAnimator>() == null)
                 {
                     tAnimator = visual.gameObject.AddComponent<TubeTeleportAnimator>();
                     tubeTeleport.TubeAnimator = tAnimator;
+                    tAnimator.Cylinder = visual.transform.FirstChildNameStartsWith("Cylinder");
                     Debug.Log("Added TubeTeleportAnimator component.");
-                }
-                
-                foreach (Transform t in visual.transform)
-                {
-                    if (!t.gameObject.name.StartsWith("Cylinder")) 
-                        continue;
-                    tAnimator.Cylinder = t;
-                    break;
                 }
             }
 

@@ -43,7 +43,8 @@ public class TileWheelRotation : MonoBehaviour
             var tile = GetComponent<Tile>();
             if(!tile)
                 return;
-            
+
+            bool noRefs = false;
             foreach (var rotation in wheelRotation.Rotations)
             {
                 Gizmos.color = Color.white;
@@ -53,9 +54,13 @@ public class TileWheelRotation : MonoBehaviour
                 if (rotation.EnterTile)
                 {
                     Gizmos.DrawLine(transform.position + tile.Up * 0.5f, rotation.EnterTile.transform.position);
-                    Handles.Label(rotation.EnterTile.transform.position, rotation.EnterTile.gameObject.name);                        
+                    Handles.Label(rotation.EnterTile.transform.position, rotation.EnterTile.gameObject.name);
                 }
+                else
+                    noRefs = true;
             }
+
+            Gizmos.color = noRefs ? Color.yellow : Color.white;
             Gizmos.DrawLine(transform.position, transform.position + tile.Up * 0.5f);
         }
     }

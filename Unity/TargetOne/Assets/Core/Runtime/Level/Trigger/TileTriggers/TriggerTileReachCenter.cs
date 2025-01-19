@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Core
 {
     public class TriggerTileReachCenter : TriggerTileBase
@@ -13,6 +15,12 @@ namespace Core
             {
                 Tile = Tile 
             });
+        }
+        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawWireSphere(transform.position, 0.05f * 6f);
         }
     }
 }

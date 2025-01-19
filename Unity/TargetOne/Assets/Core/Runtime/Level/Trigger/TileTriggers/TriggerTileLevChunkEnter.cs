@@ -1,6 +1,8 @@
-public class TriggerLevChunkEnter : TriggerTileBase
+using UnityEngine;
+
+public class TriggerTileLevChunkEnter : TriggerTileBase
 {
-    public class EventTriggerLevChunkEnter
+    public class EventTriggerTileLevChunkEnter
     {
         public LevChunk LevChunkEnter;
         public Tile Tile;
@@ -10,10 +12,16 @@ public class TriggerLevChunkEnter : TriggerTileBase
 
     public override void CustomTriggerLogic()
     {
-        GlobalEventAggregator.EventAggregator.Publish(new EventTriggerLevChunkEnter
+        GlobalEventAggregator.EventAggregator.Publish(new EventTriggerTileLevChunkEnter
         {
             LevChunkEnter = LevChunkEnter,
             Tile = Tile 
         });
+    }
+    
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, 0.05f * 4f);
     }
 }

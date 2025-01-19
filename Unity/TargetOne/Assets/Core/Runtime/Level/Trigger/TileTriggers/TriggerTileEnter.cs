@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Core
 {
     public class TriggerTileEnter : TriggerTileBase
@@ -13,6 +15,12 @@ namespace Core
             {
                 Tile = Tile 
             });
+        }
+        
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.grey;
+            Gizmos.DrawWireSphere(transform.position, 0.05f * 2f);
         }
     }
 }

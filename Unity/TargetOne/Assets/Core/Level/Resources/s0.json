@@ -17,5 +17,6 @@
       "Probability": 0.3,
       "Seed": 54321
     }
-  ]
+  ],
+  "ConfigurationLuaHandlerCode": ""
 }

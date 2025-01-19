@@ -21,10 +21,13 @@ public class SegmentConfiguration
     public Range ChunksNumber; // Range for the number of chunks to generate in this segment
     public ChunkConfig[] ChunksPool; // Pool of available chunks for generation in this segment
 
-    // todo: lua handler: change weather, change music, etc.
+    public string ConfigurationLuaHandlerCode;
 
     public static SegmentConfiguration CreateDefaultSegmentConfiguration(long segmentID)
     {
+        // todo: load default cfg for a range of segment ids
+        // from file : s50-s60-default.json
+        
         var segmentConfiguration = new SegmentConfiguration();
         
         segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
@@ -33,12 +36,30 @@ public class SegmentConfiguration
         segmentConfiguration.ChunksNumber = new Range(6, 8);
         segmentConfiguration.ChunksPool = new[]
         {
-            new ChunkConfig{ChunkName = "ChunkA", Probability = 1f, Seed = -1},
-            new ChunkConfig{ChunkName = "ChunkB", Probability = 1f, Seed = -1},
-            new ChunkConfig{ChunkName = "ChunkC", Probability = 1f, Seed = -1},
-            new ChunkConfig{ChunkName = "ChunkD", Probability = 1f, Seed = -1},
-            new ChunkConfig{ChunkName = "ChunkE", Probability = 1f, Seed = -1}
+            new ChunkConfig{ChunkName = "ChunkAUsr", Probability = 1f, Seed = -1},
+            new ChunkConfig{ChunkName = "ChunkBUsr", Probability = 1f, Seed = -1},
+            new ChunkConfig{ChunkName = "ChunkCUsr", Probability = 1f, Seed = -1},
+            new ChunkConfig{ChunkName = "ChunkDUsr", Probability = 1f, Seed = -1},
+            new ChunkConfig{ChunkName = "ChunkEUsr", Probability = 1f, Seed = -1}
         };
+        
+        return segmentConfiguration;
+    }
+    
+    public static SegmentConfiguration CreateFinalStubSegment(long segmentIndex)
+    {
+        var segmentConfiguration = new SegmentConfiguration();
+        
+        segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
+        segmentConfiguration.SegmentID = segmentIndex;
+        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingName;
+        segmentConfiguration.ChunksNumber = new Range(2, 2);
+        segmentConfiguration.ChunksPool = new[]
+        {
+            new ChunkConfig{ChunkName = "ChunkCircleUsr", Probability = 1f, Seed = -1},
+            new ChunkConfig{ChunkName = "ChunkLineUsr", Probability = 1f, Seed = -1}
+        };
+        segmentConfiguration.ConfigurationLuaHandlerCode = "levchunkseq(\"ChunkLineUsr\", \"ChunkCircleUsr\")";
         
         return segmentConfiguration;
     }
@@ -50,7 +71,7 @@ public class SegmentConfiguration
 
         if (jsonFile == null)
         {
-            Debug.LogError($"s{segmentID}.json file not found in Resources.");
+            Debug.Log($"s{segmentID}.json file not found in Resources.");
             return null;
         }
 
