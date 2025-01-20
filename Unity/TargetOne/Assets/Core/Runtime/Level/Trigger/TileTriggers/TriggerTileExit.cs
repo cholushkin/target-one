@@ -1,4 +1,6 @@
 using UnityEngine;
+using GameLib.Alg;
+using GameLib.Log;
 
 namespace Core
 {
@@ -11,6 +13,7 @@ namespace Core
         
         public override void CustomTriggerLogic()
         {
+            LogChecker.Print(LogChecker.Level.Verbose, $"TriggerTileExit for {transform.GetDebugName()}");
             GlobalEventAggregator.EventAggregator.Publish(new EventTriggerTileExit
             {
                 Tile = Tile 

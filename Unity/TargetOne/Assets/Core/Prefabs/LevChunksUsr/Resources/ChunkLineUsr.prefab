@@ -137,6 +137,58 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -67.08
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -33.37
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -27.675747
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.6861201
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.15820615
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.69129544
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.16223665
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 26.193
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 90.373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -0.249
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.x
+      value: 57.824463
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.y
+      value: 114.44388
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.z
+      value: -664.7206
+      objectReference: {fileID: 0}
     - target: {fileID: 4975131566849404099, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
       propertyPath: m_Name
       value: CinamachineCamerasContainer
@@ -278,6 +330,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5087761731433754514, guid: b0a87bd392174854d892fb9358d331ca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 170153695752237585}
+    - targetCorrespondingSourceObject: {fileID: 5087761731433754514, guid: b0a87bd392174854d892fb9358d331ca, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3175029494406466713}
     - targetCorrespondingSourceObject: {fileID: 5380029198844009266, guid: b0a87bd392174854d892fb9358d331ca, type: 3}
       insertIndex: -1
       addedObject: {fileID: 6107132843137996330}
@@ -683,7 +738,7 @@ MonoBehaviour:
   EnteredFromTile: {fileID: 0}
   Tile: {fileID: 0}
   IsWalkerEntered: 0
-  LevChunkExit: {fileID: 0}
+  LevChunkExit: {fileID: 8162491071316585556}
 --- !u!1 &6435919611008004842 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 5087761731433754514, guid: b0a87bd392174854d892fb9358d331ca, type: 3}
@@ -777,7 +832,19 @@ MonoBehaviour:
   IsActive: 1
   Handlers:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 3175029494406466713}
+        m_TargetAssemblyTypeName: BlendToCinemachineCamera, Core
+        m_MethodName: BlendToCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
   HitCount: 0
@@ -786,7 +853,20 @@ MonoBehaviour:
   EnteredFromTile: {fileID: 0}
   Tile: {fileID: 0}
   IsWalkerEntered: 0
-  LevChunkEnter: {fileID: 0}
+  LevChunkEnter: {fileID: 8162491071316585556}
+--- !u!114 &3175029494406466713
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6435919611008004842}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec39995d8994bd4381f7c38ebf9364a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 0}
 --- !u!1 &6978702894252044900 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9156649073956581148, guid: b0a87bd392174854d892fb9358d331ca, type: 3}
@@ -839,7 +919,7 @@ MonoBehaviour:
   ScriptHandler: 
   RunLuaCoroutine: 0
   HitCount: 0
-  LevChunk: {fileID: 0}
+  LevChunk: {fileID: 6978702894252044900}
 --- !u!4 &7751405115010083038 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8383771201115731366, guid: b0a87bd392174854d892fb9358d331ca, type: 3}

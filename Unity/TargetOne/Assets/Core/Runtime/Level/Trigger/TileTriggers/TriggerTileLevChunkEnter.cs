@@ -1,4 +1,6 @@
 using UnityEngine;
+using GameLib.Alg;
+using GameLib.Log;
 
 public class TriggerTileLevChunkEnter : TriggerTileBase
 {
@@ -12,6 +14,7 @@ public class TriggerTileLevChunkEnter : TriggerTileBase
 
     public override void CustomTriggerLogic()
     {
+        LogChecker.Print(LogChecker.Level.Verbose, $"TriggerTileLevChunkEnter for {transform.GetDebugName()}");
         GlobalEventAggregator.EventAggregator.Publish(new EventTriggerTileLevChunkEnter
         {
             LevChunkEnter = LevChunkEnter,

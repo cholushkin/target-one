@@ -978,6 +978,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 6129393379082431771, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
       insertIndex: -1
       addedObject: {fileID: 2181859397263200982}
+    - targetCorrespondingSourceObject: {fileID: 6129393379082431771, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1560254801440050823}
     - targetCorrespondingSourceObject: {fileID: 5622935749861151995, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
       insertIndex: -1
       addedObject: {fileID: 8017576325222994134}
@@ -1273,7 +1276,7 @@ MonoBehaviour:
   EnteredFromTile: {fileID: 0}
   Tile: {fileID: 0}
   IsWalkerEntered: 0
-  LevChunkExit: {fileID: 0}
+  LevChunkExit: {fileID: 2525089731678374464}
 --- !u!1 &1207006372541560676 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 2280432313462085641, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
@@ -1619,7 +1622,7 @@ MonoBehaviour:
   EnteredFromTile: {fileID: 0}
   Tile: {fileID: 0}
   IsWalkerEntered: 0
-  LevChunkExit: {fileID: 0}
+  LevChunkExit: {fileID: 2525089731678374464}
 --- !u!4 &5292150233219012050 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5049910005001042623, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
@@ -1775,7 +1778,19 @@ MonoBehaviour:
   IsActive: 1
   Handlers:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1560254801440050823}
+        m_TargetAssemblyTypeName: BlendToCinemachineCamera, Core
+        m_MethodName: BlendToCamera
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   ScriptHandler: 
   RunLuaCoroutine: 0
   HitCount: 0
@@ -1784,7 +1799,20 @@ MonoBehaviour:
   EnteredFromTile: {fileID: 0}
   Tile: {fileID: 0}
   IsWalkerEntered: 0
-  LevChunkEnter: {fileID: 0}
+  LevChunkEnter: {fileID: 2525089731678374464}
+--- !u!114 &1560254801440050823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6515132169136161398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ec39995d8994bd4381f7c38ebf9364a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Camera: {fileID: 4086160761594787891}
 --- !u!4 &6902173967920682583 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5813283290569668922, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
@@ -1842,7 +1870,7 @@ MonoBehaviour:
   ScriptHandler: 
   RunLuaCoroutine: 0
   HitCount: 0
-  LevChunk: {fileID: 0}
+  LevChunk: {fileID: 7196342384568662613}
 --- !u!4 &7536030610997715183 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7489705069135204226, guid: 5d1d74ef78e44b540a6d9a5397fb66db, type: 3}
@@ -2141,6 +2169,46 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -65.77
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -28.942123
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -32.13
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.7617185
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.31078348
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.52729803
+      objectReference: {fileID: 0}
+    - target: {fileID: 4637492328522174203, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.21249796
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.x
+      value: -860.02563
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.y
+      value: -793.7445
+      objectReference: {fileID: 0}
+    - target: {fileID: 4971962903507562695, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+      propertyPath: m_NoiseOffsets.z
+      value: -344.45154
+      objectReference: {fileID: 0}
     - target: {fileID: 4975131566849404099, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
       propertyPath: m_Name
       value: CinamachineCamerasContainer
@@ -2155,6 +2223,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4365371570820798114, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
   m_PrefabInstance: {fileID: 1367260037846546428}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4086160761594787891 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3048249008164245455, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}
+  m_PrefabInstance: {fileID: 1367260037846546428}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &6568917978820694205 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: -3904612236644653247, guid: 03081d529eabceb40b11ca94ed204e83, type: 3}

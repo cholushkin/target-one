@@ -1,4 +1,6 @@
 using UnityEngine;
+using GameLib.Alg;
+using GameLib.Log;
 
 public class TriggerTileLevChunkExit : TriggerTileBase
 {
@@ -12,6 +14,7 @@ public class TriggerTileLevChunkExit : TriggerTileBase
 
     public override void CustomTriggerLogic()
     {
+        LogChecker.Print(LogChecker.Level.Verbose, $"TriggerTileLevChunkExit for {transform.GetDebugName()}");
         GlobalEventAggregator.EventAggregator.Publish(new EventTriggerTileLevChunkExit
         {
             LevChunkExit = LevChunkExit,

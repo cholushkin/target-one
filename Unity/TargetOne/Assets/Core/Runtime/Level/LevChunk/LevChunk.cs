@@ -27,22 +27,33 @@ public class LevChunk : MonoBehaviour
         Assert.IsTrue(triggerLevChunkSpawn.MaxHitCount == 1, transform.GetDebugName());
         
         // Entries
-        var entries = transform.GetComponentsInChildren<TriggerTileLevChunkEnter>();
-        Assert.IsTrue(entries.Length >= 1, transform.GetDebugName());
-        foreach (var entry in entries)
+        var triggerTileLevChunkEntries = transform.GetComponentsInChildren<TriggerTileLevChunkEnter>();
+        var levChunkEntries = transform.GetComponentsInChildren<LevChunkEntry>();
+        Assert.IsTrue(triggerTileLevChunkEntries.Length >= 1, transform.GetDebugName());
+        Assert.IsTrue(levChunkEntries.Length >= 1, transform.GetDebugName());
+        Assert.IsTrue(triggerTileLevChunkEntries.Length == levChunkEntries.Length);
+        foreach (var entry in triggerTileLevChunkEntries)
         {
             Assert.IsNotNull(entry.LevChunkEnter );
             Assert.IsTrue(entry.MaxHitCount == -1 );
         }
 
         // Exits
-        var exits = transform.GetComponentsInChildren<TriggerTileLevChunkExit>();
-        Assert.IsTrue(exits.Length >= 1, transform.GetDebugName());
-        foreach (var exit in exits)
+        var levChunkExits = transform.GetComponentsInChildren<LevChunkExit>();
+        if (levChunkExits.Length > 0) // some thunks could have no exit
         {
-            Assert.IsNotNull(exit.LevChunkExit );
-            Assert.IsTrue(exit.MaxHitCount == -1 );
+            var triggerTileLevChunksExits = transform.GetComponentsInChildren<TriggerTileLevChunkExit>();
+            Assert.IsTrue(triggerTileLevChunksExits.Length >= 1, transform.GetDebugName());
+            Assert.IsTrue(levChunkExits.Length >= 1, transform.GetDebugName());
+            Assert.IsTrue(triggerTileLevChunksExits.Length == levChunkExits.Length);
+            foreach (var exit in triggerTileLevChunksExits)
+            {
+                Assert.IsNotNull(exit.LevChunkExit);
+                Assert.IsTrue(exit.MaxHitCount == -1);
+            }
         }
+
+        Debug.Log($"Validation completed for {transform.GetDebugName()}.");
     }
 
 #if UNITY_EDITOR
@@ -57,12 +68,15 @@ public class LevChunk : MonoBehaviour
 
         // Configure added components
         triggerLevChunkSpawn.MaxHitCount = 1;
+        triggerLevChunkSpawn.LevChunk = chunkGameObject;
 
         // Add References
         levChunk.References = AddPrefabToChunk<References>("LevChunkReferences", chunkGameObject);
 
         // Add cameras container
         levChunk.Cameras = AddPrefabToChunk<LevChunkCamerasContainer>("CinamachineCamerasContainer", chunkGameObject);
+        
+        Debug.Log("Processed: <LevChunk> <TriggerLevChunkSpawn> LevChunkReferences CinamachineCamerasContainer");
 
         // Configure tiles
         ConfigureTiles(transform.gameObject);
@@ -104,6 +118,7 @@ public class LevChunk : MonoBehaviour
                     ++entriesCountAdded;
                 ++entriesCount;
                 var triggerLevChunkEnter = tileGameObject.AddSingleComponentSafe<TriggerTileLevChunkEnter>();
+                triggerLevChunkEnter.LevChunkEnter = levChunk.GetComponent<LevChunk>();
             }
 
             // Process Exit
@@ -115,6 +130,7 @@ public class LevChunk : MonoBehaviour
                     ++exitsCountAdded;
                 ++exitsCount;
                 var triggerLevChunkExit = tileGameObject.AddSingleComponentSafe<TriggerTileLevChunkExit>();
+                triggerLevChunkExit.LevChunkExit = levChunk.GetComponent<LevChunk>();
             }
 
             // Process Visual
