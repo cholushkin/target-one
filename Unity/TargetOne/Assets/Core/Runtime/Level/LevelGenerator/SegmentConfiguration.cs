@@ -32,7 +32,7 @@ public class SegmentConfiguration
         
         segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
         segmentConfiguration.SegmentID = segmentID;
-        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingName;
+        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingsName;
         segmentConfiguration.ChunksNumber = new Range(6, 8);
         segmentConfiguration.ChunksPool = new[]
         {
@@ -52,7 +52,7 @@ public class SegmentConfiguration
         
         segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
         segmentConfiguration.SegmentID = segmentIndex;
-        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingName;
+        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingsName;
         segmentConfiguration.ChunksNumber = new Range(2, 2);
         segmentConfiguration.ChunksPool = new[]
         {

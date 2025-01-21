@@ -1,25 +1,13 @@
-using System;
+using System.Linq;
 using GameLib.Alg;
-using GameLib.ColorScheme;
-using UnityEngine;
 
 public class FantasySettingsManager : Singleton<FantasySettingsManager>
 {
-    [Serializable]
-    public class Settings
+    public FantasySettings[] FantasySettings;
+    public const FantasySettings.FantasySettingsType DefaultFantasySettings = global::FantasySettings.FantasySettingsType.Castle;
+
+    public FantasySettings GetDefaultSettings()
     {
-        public string Name;
-        public GameObject[] TileVisualVariations;
-
-        public ColorScheme[] ChunkColorSchemeVariations;
-        public ColorScheme[] DecorationsColorSchemeVariations;
-
-        // todo: music tracks
-        // todo: sun
-        // todo: fog
-        // todo: lights
+        return FantasySettings.FirstOrDefault(t => t.Type == DefaultFantasySettings);
     }
-
-    public Settings[] FanatasySettings;
-    public const string DefaultFantasySettingName = "Castle";
 }

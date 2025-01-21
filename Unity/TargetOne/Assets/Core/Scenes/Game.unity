@@ -386,8 +386,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 54.7124, y: 39.305748, z: 27.926542}
+  m_LocalRotation: {x: -0.09500875, y: -0.90205115, z: 0.2492357, w: -0.33935034}
+  m_LocalPosition: {x: -18.136532, y: 18.560265, z: 20.657597}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -658,15 +658,7 @@ MonoBehaviour:
     AddContextSiblingIndex: 0
     AddComponentName: 0
     LocalLogBuffer: 
-  FanatasySettings:
-  - Name: Castle
-    TileVisualVariations:
-    - {fileID: 919132149155446097, guid: 0511d2bbf2796254b8ab9c6cafe08bb7, type: 3}
-    - {fileID: 919132149155446097, guid: ad6de16a62289034d81da3816bc855a7, type: 3}
-    - {fileID: 919132149155446097, guid: 697e372772ca3464c93bfc1705f96cef, type: 3}
-    - {fileID: 919132149155446097, guid: 77fd6dfae79f5364083a42686d130b8f, type: 3}
-    ChunkColorSchemeVariations: []
-    DecorationsColorSchemeVariations: []
+  FantasySettings: []
 --- !u!4 &697238809
 Transform:
   m_ObjectHideFlags: 0
