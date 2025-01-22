@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
+using GameLib.Random;
+using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using Range = GameLib.Random.Range;
 
 [Serializable]
 public class SegmentConfiguration
@@ -18,7 +18,7 @@ public class SegmentConfiguration
     public long Seed; // Specific seed for this segment (-1 to use seed based on SegmentID)
     public long SegmentID; // Sequential identifier for the segment
     public string FantasySetting; // Visual or thematic setting of the segment
-    public Range ChunksNumber; // Range for the number of chunks to generate in this segment
+    public int2 ChunksNumber; // Range for the number of chunks to generate in this segment
     public ChunkConfig[] ChunksPool; // Pool of available chunks for generation in this segment
 
     public string ConfigurationLuaHandlerCode;
@@ -30,10 +30,10 @@ public class SegmentConfiguration
         
         var segmentConfiguration = new SegmentConfiguration();
         
-        segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
+        segmentConfiguration.Seed = RandomHelper.Rnd.ValueInt();
         segmentConfiguration.SegmentID = segmentID;
-        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingsName;
-        segmentConfiguration.ChunksNumber = new Range(6, 8);
+        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettings.ToString();
+        segmentConfiguration.ChunksNumber = new int2(6, 8);
         segmentConfiguration.ChunksPool = new[]
         {
             new ChunkConfig{ChunkName = "ChunkAUsr", Probability = 1f, Seed = -1},
@@ -50,10 +50,10 @@ public class SegmentConfiguration
     {
         var segmentConfiguration = new SegmentConfiguration();
         
-        segmentConfiguration.Seed = (long)(Int32.MaxValue * Random.value);
+        segmentConfiguration.Seed = RandomHelper.Rnd.ValueInt();
         segmentConfiguration.SegmentID = segmentIndex;
-        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettingsName;
-        segmentConfiguration.ChunksNumber = new Range(2, 2);
+        segmentConfiguration.FantasySetting = FantasySettingsManager.DefaultFantasySettings.ToString();
+        segmentConfiguration.ChunksNumber = new int2(2, 2);
         segmentConfiguration.ChunksPool = new[]
         {
             new ChunkConfig{ChunkName = "ChunkCircleUsr", Probability = 1f, Seed = -1},

@@ -1,7 +1,8 @@
 using System;
 using System.Linq;
+using GameLib.Random;
 using UnityEngine;
-using Random = Unity.Mathematics.Random;
+using Random = GameLib.Random.Random;
 
 public class LevChunkSkin : MonoBehaviour
 {

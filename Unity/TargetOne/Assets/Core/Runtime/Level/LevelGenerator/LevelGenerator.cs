@@ -8,6 +8,7 @@ using UnityEngine;
 using Cysharp.Threading.Tasks;
 using uconsole;
 using UnityEngine.Assertions;
+using Random = GameLib.Random.Random;
 
 public class LevelGenerator : Singleton<LevelGenerator>
 {
@@ -37,7 +38,7 @@ public class LevelGenerator : Singleton<LevelGenerator>
     private int _chunksAmountInSegment;
     private int _chunkInstantiatedInSegment;
     private Queue<string> _levChunksSequence;
-    private IPseudoRandomNumberGenerator _segmentRnd;
+    private Random _segmentRnd;
     private bool _dynamicProbability; // todo: impl lua handler
     private bool _avoidSequentialDuplicates; // todo: implement
     private bool _isRegenerated; // In case if player can't complete the segment, we allow to regenerate it without pickup-items
@@ -245,8 +246,8 @@ public class LevelGenerator : Singleton<LevelGenerator>
             if (chunkConfig.Seed == -1)
                 chunkConfig.Seed = _currentSegmentConfiguration.SegmentID;
 
-        _segmentRnd = RandomHelper.CreateRandomNumberGenerator(_currentSegmentConfiguration.Seed); 
-        _chunksAmountInSegment = _segmentRnd.FromRangeIntInclusive(_currentSegmentConfiguration.ChunksNumber); // move rnd
+        _segmentRnd = RandomHelper.CreateRandomNumberGenerator((uint)_currentSegmentConfiguration.Seed); 
+        _chunksAmountInSegment = _segmentRnd.RangeInclusive(_currentSegmentConfiguration.ChunksNumber); // move rnd
         _chunkInstantiatedInSegment = 0;
         _isRegenerated = false; 
         _dynamicProbability = false; // Could be enabled by lua-handler

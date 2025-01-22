@@ -5,11 +5,10 @@ using GameLib.ColorScheme;
 using GameLib.Random;
 using NaughtyAttributes;
 using TowerGenerator;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
-using Range = GameLib.Random.Range;
 
 public class CompanyLogoController : MonoBehaviour
 {
@@ -46,7 +45,8 @@ public class CompanyLogoController : MonoBehaviour
 
     [Header("Audio configuration")]
     // ---------------------------------
-    public Range PitchRandomizationRange;
+    [ShowAsRange]
+    public float2 PitchRandomizationRange;
 
     public AudioClip[] AudioClips;
 
@@ -79,7 +79,7 @@ public class CompanyLogoController : MonoBehaviour
     private async UniTask RandomizeSoundAsync()
     {
         AudioSource.clip = RandomHelper.Rnd.FromArray(AudioClips);
-        AudioSource.pitch = RandomHelper.Rnd.FromRange(PitchRandomizationRange);
+        AudioSource.pitch = RandomHelper.Rnd.Range(PitchRandomizationRange);
 
         if (AudioSource.clip != null)
         {
@@ -101,7 +101,7 @@ public class CompanyLogoController : MonoBehaviour
             await UniTask.Yield(); // Wait until the audio starts playing
         }
         
-        if(Random.value < PlayTextQuantumEffectChance)
+        if(RandomHelper.Rnd.ValueFloat() < PlayTextQuantumEffectChance)
             TextQuantumEffect.PlayEffect();
 
         Rotating.StartRotating();

@@ -1,27 +1,31 @@
-using System;
 using DG.Tweening;
+using GameLib.Random;
+using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
-using Range = GameLib.Random.Range;
+using Random = System.Random;
 
 public class TileSpawnEffectRotation : LevChunkSpawnEffectBase
 {
-    public Range Duration;
+    [ShowAsRange] public float2 Duration;
+
     public override void PlayEffect()
     {
         foreach (var tile in _tiles)
         {
             var q = GetRandomQuaternion();
-            tile.Visual.transform.DORotateQuaternion(q, Random.Range(Duration.From, Duration.To )).From().SetEase(Ease.OutQuart);
+            tile.Visual.transform.DORotateQuaternion(q, 
+                RandomHelper.Rnd.Range(Duration.From(), Duration.To()))
+                .From()
+                .SetEase(Ease.OutQuart);
         }
     }
-    
+
     public static Quaternion GetRandomQuaternion()
     {
         // Generate three random numbers
-        float u1 = Random.value;
-        float u2 = Random.value;
-        float u3 = Random.value;
+        float u1 = RandomHelper.Rnd.ValueFloat();
+        float u2 = RandomHelper.Rnd.ValueFloat();
+        float u3 = RandomHelper.Rnd.ValueFloat();
 
         // Convert the random numbers into quaternion components
         float w = Mathf.Sqrt(1 - u1) * Mathf.Sin(2 * Mathf.PI * u2);
@@ -32,5 +36,4 @@ public class TileSpawnEffectRotation : LevChunkSpawnEffectBase
         // Return the random quaternion
         return new Quaternion(x, y, z, w);
     }
-
 }
