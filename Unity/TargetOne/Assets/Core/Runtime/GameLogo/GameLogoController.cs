@@ -5,9 +5,11 @@ public class GameLogoController : MonoBehaviour
 {
     public float ShowDuration;
     public string NextSceneName;
+    public Transform GameTitle;
     void Awake()
     {
         ScreenTransitionEffects.Instance.PlayEffect("ColorFadeReveal", null);
+        //GameTitle.SetParent(null);
         Invoke(nameof(LoadScene), ShowDuration);
     }
     

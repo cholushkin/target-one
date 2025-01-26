@@ -1,5 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using Gamelib;
 using GameLib.ColorScheme;
 using GameLib.Random;
@@ -19,7 +20,13 @@ public class CompanyLogoController : MonoBehaviour
         public Sprite[] Spr; // for each color index
     }
 
+    public Transform Piece1;
+    public Transform Piece2;
+    public Transform Piece3;
+        
+
     public bool LoadNextScene;
+    public bool ShowSDRender;
     public string NextSceneName;
     public float DelayToTheNextScene;
     [Required] public TextQuantumEffect TextQuantumEffect;
@@ -29,9 +36,6 @@ public class CompanyLogoController : MonoBehaviour
     [Required] public RevealImage RevealSDRender;
     [Required] public RevealImage RevealBG;
     [Required] public GameObject Chunk;
-
-    [Required] public Rotating Rotating;
-    [Required] public Scaling Scaling;
 
     [Header("Visual configuration")]
     // ---------------------------------
@@ -104,8 +108,7 @@ public class CompanyLogoController : MonoBehaviour
         if(RandomHelper.Rnd.ValueFloat() < PlayTextQuantumEffectChance)
             TextQuantumEffect.PlayEffect();
 
-        Rotating.StartRotating();
-        Scaling.StartScaling();
+        StartRotatingAndScalingAnimation();
 
         for (int i = 0; i < frameDelay.Length; i++)
         {
@@ -117,12 +120,27 @@ public class CompanyLogoController : MonoBehaviour
             else
             {
                 // Call RevealRender for the last iteration
-                RevealRender();
+                if(ShowSDRender)
+                    RevealRender();
             }
 
             // Update chunk configuration
             _chunkControllerBase.SetConfiguration();
         }
+    }
+
+    private void StartRotatingAndScalingAnimation()
+    {
+        Chunk.transform.DOScale(Vector3.one * 1.1f, 7f).SetEase(Ease.OutCubic);
+        
+        Piece1.DOScale(Vector3.one * 1.5f, 2f)
+            .From().SetEase(Ease.OutBack);
+        
+        Piece2.DOLocalRotate(transform.localRotation.eulerAngles + Vector3.forward * 25, 2f, RotateMode.FastBeyond360)
+            .From().SetEase(Ease.InOutQuint).SetLoops(1);
+        
+        Piece3.DOLocalRotate(transform.localRotation.eulerAngles + Vector3.forward * -5, 1.125f, RotateMode.FastBeyond360)
+            .SetEase(Ease.InOutQuint).SetLoops(2, LoopType.Yoyo);
     }
 
     private void RevealRender()

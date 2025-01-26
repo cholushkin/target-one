@@ -10,7 +10,7 @@ public class LevChunk : MonoBehaviour
     public References References;
 
 
-    private void OnValidate()
+    protected virtual void OnValidate()
     {
         var chunkGameObject = transform.gameObject;
         var levChunk = chunkGameObject.GetComponent<LevChunk>();

@@ -8,9 +8,49 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1339890700779658730, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -180
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 1668864211854744257, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2045530899860586619, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_Name
+      value: QuantumCatUsr
+      objectReference: {fileID: 0}
     - target: {fileID: 4536554327162572821, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
       propertyPath: m_Name
       value: QuantumCatUsr
+      objectReference: {fileID: 0}
+    - target: {fileID: 6409411289119175784, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6902641778238087053, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7638046081594947264, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -55,65 +95,5 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1144409604362952764, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1115779368070357887}
-    - targetCorrespondingSourceObject: {fileID: 7373486132091003374, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 6539486025157632950}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
---- !u!1 &3682079555297593886 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7373486132091003374, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
-  m_PrefabInstance: {fileID: 6145932770308811760}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6539486025157632950
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3682079555297593886}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d936fd0361ee5c498418600dfa14657, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  AlongAxis: {x: 0, y: 0, z: 1}
-  LoopDuration: 1.8
-  RandomizeInitialAngle: 0
-  StartOnAwake: 0
-  IndependentUpdate: 0
-  LoopCount: 1
-  Ease: 27
---- !u!1 &6533455537326590924 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1144409604362952764, guid: ef02a05ce96e1e14fa5e38a364f7d25c, type: 3}
-  m_PrefabInstance: {fileID: 6145932770308811760}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1115779368070357887
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6533455537326590924}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1ef2eaf7ec83a04abf303c85228c193, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Scale: 1.1
-  LoopDuration: 1
-  RandomizeInitialScale: 0
-  IndependentUpdate: 0
-  PlayOnAwake: 0
-  Ease: 19
-  Loops: 2
-  AnimCurve:
-    serializedVersion: 2
-    m_Curve: []
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4

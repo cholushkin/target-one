@@ -19,6 +19,9 @@ public class ScreenTransitionEffects : Singleton<ScreenTransitionEffects>
     {
         base.Awake();
         _effects = transform.Children().ToList();
+        
+        if(InitialBackground != null)
+            InitialBackground.gameObject.SetActive(true);
 
         // Hide all if user forgot to hide it
         var transitionEffects = GetComponentsInChildren<TransitionEffect>();
